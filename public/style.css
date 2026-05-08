@@ -193,6 +193,7 @@ main {
   color: inherit;
   display: flex;
   flex-direction: column;
+  position: relative;
   opacity: 0;
   transform: translateY(28px);
   transition:
@@ -476,6 +477,137 @@ footer a {
 }
 footer a:hover { color: var(--text); }
 .foot-links { display: flex; gap: 22px; }
+
+/* ── Add Game button ── */
+.btn-add-game {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 3px;
+  padding: 6px 16px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border-bright);
+  cursor: pointer;
+  clip-path: polygon(5px 0%, 100% 0%, calc(100% - 5px) 100%, 0% 100%);
+  transition: color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.btn-add-game:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ── Remove button on custom cards ── */
+.card-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  background: rgba(8,10,14,0.88);
+  border: 1px solid var(--border-bright);
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.18s, color 0.18s, border-color 0.18s;
+  z-index: 5;
+  border-radius: 2px;
+}
+.game-card[data-custom]:hover .card-remove { opacity: 1; }
+.card-remove:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: #0d1117;
+  border: 1px solid var(--border-bright);
+  border-radius: 3px;
+  padding: 36px;
+  width: min(460px, 92vw);
+  transform: translateY(16px);
+  transition: transform 0.22s ease;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 4px;
+  margin-bottom: 5px;
+}
+.modal-sub {
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  margin-bottom: 26px;
+}
+.form-field { margin-bottom: 15px; }
+.form-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.form-req { color: var(--accent); }
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--accent); }
+.form-input::placeholder { color: rgba(255,255,255,0.18); }
+.form-actions { display: flex; gap: 10px; margin-top: 24px; }
+.btn-modal-submit {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
+  letter-spacing: 3px;
+  padding: 10px 26px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  clip-path: polygon(7px 0%, 100% 0%, calc(100% - 7px) 100%, 0% 100%);
+  transition: background 0.2s;
+}
+.btn-modal-submit:hover { background: #e01c1c; }
+.btn-modal-cancel {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
+  letter-spacing: 3px;
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border-bright);
+  cursor: pointer;
+  clip-path: polygon(7px 0%, 100% 0%, calc(100% - 7px) 100%, 0% 100%);
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-modal-cancel:hover { color: var(--text); border-color: var(--text-dim); }
 
 /* ── Responsive ── */
 @media (max-width: 1100px) {

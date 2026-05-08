@@ -38,7 +38,7 @@
   </section>
 
   <section class="games-section" id="games">
-    <div class="section-label">ALL GAMES</div>
+    <div class="section-label">ALL GAMES <button id="btn-add-game" class="btn-add-game">+ ADD GAME</button></div>
     <div class="games-grid" id="games-grid"></div>
   </section>
 
@@ -75,6 +75,35 @@
     <a href="#">Privacy</a>
   </div>
 </footer>
+
+<div class="modal-overlay" id="add-game-overlay">
+  <div class="modal">
+    <div class="modal-title">ADD A GAME</div>
+    <div class="modal-sub">Saved to this browser — shows up on your hub every time you visit.</div>
+    <form id="add-game-form" autocomplete="off">
+      <div class="form-field">
+        <label class="form-label" for="ag-url">GAME URL <span class="form-req">*</span></label>
+        <input class="form-input" id="ag-url" type="text" placeholder="https://your-game.vercel.app" required>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="ag-name">GAME NAME <span class="form-req">*</span></label>
+        <input class="form-input" id="ag-name" type="text" placeholder="MY AWESOME GAME" required maxlength="50">
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="ag-desc">DESCRIPTION <span style="opacity:.5">(optional)</span></label>
+        <input class="form-input" id="ag-desc" type="text" placeholder="One sentence about the game" maxlength="120">
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="ag-creator">CREATOR <span style="opacity:.5">(optional)</span></label>
+        <input class="form-input" id="ag-creator" type="text" placeholder="YOUR NAME" maxlength="30">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-modal-submit">ADD GAME</button>
+        <button type="button" class="btn-modal-cancel" id="ag-cancel">CANCEL</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script src="games.js"></script>
 <script>
@@ -353,6 +382,55 @@ function drawZombie(canvas, fogOff) {
   ctx.fillText('ZOMBIE SURVIVAL', W / 2, H - 14);
 }
 
+function drawGeneric(canvas, color, name) {
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var hex = (color || '#555555').replace('#', '');
+  var r = parseInt(hex.slice(0,2),16)||85, g = parseInt(hex.slice(2,4),16)||85, b = parseInt(hex.slice(4,6),16)||85;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#080a0e';
+  ctx.fillRect(0, 0, W, H);
+
+  // Diagonal lines in the game's accent color
+  ctx.strokeStyle = 'rgba('+r+','+g+','+b+',0.09)';
+  ctx.lineWidth = 1;
+  var step = Math.round(H / 5);
+  for (var xi = -H; xi < W + H; xi += step) {
+    ctx.beginPath(); ctx.moveTo(xi, 0); ctx.lineTo(xi + H, H); ctx.stroke();
+  }
+
+  // Radial glow
+  var grd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, H * 0.55);
+  grd.addColorStop(0, 'rgba('+r+','+g+','+b+',0.22)');
+  grd.addColorStop(1, 'transparent');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  // Game name centered
+  var fs = Math.max(16, Math.round(H * 0.15));
+  ctx.font = fs + 'px "Bebas Neue", sans-serif';
+  ctx.fillStyle = 'rgba('+r+','+g+','+b+',0.9)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba('+r+','+g+','+b+',0.55)';
+  ctx.shadowBlur = 14;
+  var words = name.split(' ');
+  if (words.length <= 3) {
+    ctx.fillText(name, W/2, H/2);
+  } else {
+    var mid = Math.ceil(words.length / 2);
+    ctx.fillText(words.slice(0, mid).join(' '), W/2, H/2 - fs * 0.58);
+    ctx.fillText(words.slice(mid).join(' '), W/2, H/2 + fs * 0.58);
+  }
+  ctx.shadowBlur = 0;
+
+  // Accent border
+  ctx.strokeStyle = 'rgba('+r+','+g+','+b+',0.22)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, W-2, H-2);
+}
+
 // ─────────────────────────────────────────────
 // CARD GENERATION
 // ─────────────────────────────────────────────
@@ -419,7 +497,13 @@ function buildCard(game, index) {
   body.append(top, desc, bottom, pb);
   card.append(canvas, body);
 
-  thumbAnimState[game.id] = { angle: 0, fogOff: 0, canvas: canvas };
+  if (game.id === 'paintball' || game.id === 'zombie') {
+    thumbAnimState[game.id] = { angle: 0, fogOff: 0, canvas: canvas };
+  } else {
+    (function (c, g) {
+      document.fonts.ready.then(function () { drawGeneric(c, g.color, g.name); });
+    })(canvas, game);
+  }
   card.addEventListener('click', function () {
     fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': game.id } }).catch(function () {});
   });
@@ -446,6 +530,46 @@ function buildComingSoon(index) {
   return card;
 }
 
+// ─────────────────────────────────────────────
+// CUSTOM GAME STORAGE
+// ─────────────────────────────────────────────
+var STORAGE_KEY = 'cmg-custom-games';
+var COLOR_PALETTE = ['#cc1515','#1560cc','#cc8800','#8815cc','#15cc78','#cc3377'];
+
+function loadCustomGames() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch (e) { return []; }
+}
+
+function saveCustomGames(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+function renderCustomCards() {
+  document.querySelectorAll('.game-card[data-custom]').forEach(function (c) { c.remove(); });
+  var grid = document.getElementById('games-grid');
+  var anchor = grid.querySelector('.coming-soon-card');
+  loadCustomGames().forEach(function (game, i) {
+    var card = buildCard(game, GAMES.length + i);
+    card.dataset.custom = 'true';
+    var removeBtn = document.createElement('button');
+    removeBtn.className = 'card-remove';
+    removeBtn.setAttribute('aria-label', 'Remove ' + game.name);
+    removeBtn.innerHTML = '&times;';
+    removeBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      saveCustomGames(loadCustomGames().filter(function (g) { return g.id !== game.id; }));
+      renderCustomCards();
+    });
+    card.appendChild(removeBtn);
+    grid.insertBefore(card, anchor || null);
+    (function (c, delay) {
+      setTimeout(function () { c.classList.add('animate-in'); }, delay);
+    })(card, 60 + i * 90);
+  });
+}
+
 // Build the grid
 (function () {
   const grid = document.getElementById('games-grid');
@@ -454,6 +578,7 @@ function buildComingSoon(index) {
   });
   grid.appendChild(buildComingSoon(GAMES.length));
   grid.appendChild(buildComingSoon(GAMES.length + 1));
+  renderCustomCards();
 })();
 
 // ─────────────────────────────────────────────
@@ -473,6 +598,50 @@ function buildComingSoon(index) {
   }
   fetchStats();
   setInterval(fetchStats, 30000);
+})();
+
+// ─────────────────────────────────────────────
+// ADD GAME MODAL
+// ─────────────────────────────────────────────
+(function () {
+  var overlay  = document.getElementById('add-game-overlay');
+  var form     = document.getElementById('add-game-form');
+  var urlInput = document.getElementById('ag-url');
+  var nameInput    = document.getElementById('ag-name');
+  var descInput    = document.getElementById('ag-desc');
+  var creatorInput = document.getElementById('ag-creator');
+
+  function open() { overlay.classList.add('open'); urlInput.focus(); }
+  function close() { overlay.classList.remove('open'); }
+
+  document.getElementById('btn-add-game').addEventListener('click', open);
+  document.getElementById('ag-cancel').addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var url = urlInput.value.trim();
+    var name = nameInput.value.trim();
+    if (!url || !name) return;
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+    var list = loadCustomGames();
+    list.push({
+      id: 'custom-' + Date.now(),
+      name: name.toUpperCase(),
+      description: descInput.value.trim() || 'Added from the hub.',
+      url: url,
+      creator: (creatorInput.value.trim() || 'UNKNOWN').toUpperCase(),
+      tags: [],
+      color: COLOR_PALETTE[list.length % COLOR_PALETTE.length],
+      featured: false,
+      custom: true
+    });
+    saveCustomGames(list);
+    renderCustomCards();
+    form.reset();
+    close();
+  });
 })();
 
 // ─────────────────────────────────────────────
