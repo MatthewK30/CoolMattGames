@@ -3,8 +3,9 @@ const path = require('path')
 const app = express()
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.json())
 
-// Hub sessions (active browsers on the hub page)
+// ── Hub session tracking ──────────────────────────────────────────────────────
 const sessions = new Map()
 const SESSION_TTL = 35000
 
@@ -16,8 +17,7 @@ function activePlayers() {
   return sessions.size
 }
 
-// Per-game sessions (people who launched a game in the last 30 min)
-const gameSessions = new Map() // gameId -> Map(sessionId -> timestamp)
+const gameSessions = new Map()
 const GAME_TTL = 30 * 60 * 1000
 
 function activeGamePlayers(gameId) {
@@ -30,16 +30,12 @@ function activeGamePlayers(gameId) {
   return gs.size
 }
 
-// Hub heartbeat — keeps hub player count alive
 app.post('/api/ping', (req, res) => {
   const id = req.headers['x-session-id']
-  if (id && typeof id === 'string' && id.length <= 64) {
-    sessions.set(id, Date.now())
-  }
+  if (id && typeof id === 'string' && id.length <= 64) sessions.set(id, Date.now())
   res.json({ players: activePlayers() })
 })
 
-// Called when a player clicks PLAY NOW on a game
 app.post('/api/play', (req, res) => {
   const sid = req.headers['x-session-id']
   const gid = req.headers['x-game-id']
@@ -50,22 +46,66 @@ app.post('/api/play', (req, res) => {
   res.json({ ok: true })
 })
 
-// Per-game player counts for the hub cards
 app.get('/api/stats', (req, res) => {
   const stats = {}
-  for (const gameId of gameSessions.keys()) {
-    stats[gameId] = activeGamePlayers(gameId)
-  }
+  for (const gameId of gameSessions.keys()) stats[gameId] = activeGamePlayers(gameId)
   res.json(stats)
 })
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+// ── Custom games — stored in a private GitHub Gist ───────────────────────────
+const GIST_ID    = process.env.GAMES_GIST_ID
+const GH_TOKEN   = process.env.GITHUB_TOKEN
+const GIST_FILE  = 'custom-games.json'
+const GIST_HEADERS = () => ({
+  Authorization: `token ${GH_TOKEN}`,
+  Accept: 'application/vnd.github.v3+json',
+  'User-Agent': 'CoolMattGames'
 })
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+async function readGames() {
+  if (!GIST_ID || !GH_TOKEN) return []
+  const r = await fetch(`https://api.github.com/gists/${GIST_ID}`, { headers: GIST_HEADERS() })
+  const d = await r.json()
+  const content = d.files?.[GIST_FILE]?.content
+  return content ? JSON.parse(content) : []
+}
+
+async function writeGames(games) {
+  if (!GIST_ID || !GH_TOKEN) return
+  await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+    method: 'PATCH',
+    headers: { ...GIST_HEADERS(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(games) } } })
+  })
+}
+
+app.get('/api/custom-games', async (req, res) => {
+  try { res.json(await readGames()) }
+  catch (e) { res.json([]) }
 })
+
+app.post('/api/custom-games', async (req, res) => {
+  try {
+    const game = req.body
+    if (!game?.id || !game?.name || !game?.url) return res.status(400).json({ error: 'Missing fields' })
+    const games = await readGames()
+    games.push(game)
+    await writeGames(games)
+    res.json({ ok: true })
+  } catch (e) { res.status(500).json({ error: 'Storage error' }) }
+})
+
+app.delete('/api/custom-games/:id', async (req, res) => {
+  try {
+    const games = (await readGames()).filter(g => g.id !== req.params.id)
+    await writeGames(games)
+    res.json({ ok: true })
+  } catch (e) { res.status(500).json({ error: 'Storage error' }) }
+})
+
+// ── Static / SPA fallback ────────────────────────────────────────────────────
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')))
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')))
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => console.log('Server running on port ' + PORT))
