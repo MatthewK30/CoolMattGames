@@ -131,18 +131,23 @@
 })();
 
 // ─────────────────────────────────────────────
-// ONLINE COUNTER
+// ONLINE COUNTER — real concurrent session count
 // ─────────────────────────────────────────────
 (function () {
-  const el = document.getElementById('player-count');
-  let count = Math.floor(Math.random() * 40) + 10;
-  el.textContent = count;
-
-  setInterval(function () {
-    const delta = Math.random() < 0.5 ? 1 : -1;
-    count = Math.max(10, Math.min(50, count + delta));
-    el.textContent = count;
-  }, 4000 + Math.random() * 3000);
+  var sid = sessionStorage.getItem('cmg-sid');
+  if (!sid) {
+    sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    sessionStorage.setItem('cmg-sid', sid);
+  }
+  var el = document.getElementById('player-count');
+  function ping() {
+    fetch('/api/ping', { method: 'POST', headers: { 'x-session-id': sid } })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { el.textContent = d.players; })
+      .catch(function () {});
+  }
+  ping();
+  setInterval(ping, 20000);
 })();
 
 // ─────────────────────────────────────────────
