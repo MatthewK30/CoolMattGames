@@ -1,0 +1,13 @@
+{
+  "name": "coolmattgames",
+  "version": "1.0.0",
+  "description": "A hub for games created by Matthew and friends",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
