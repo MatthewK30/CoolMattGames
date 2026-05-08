@@ -78,6 +78,13 @@
 
 <script src="games.js"></script>
 <script>
+// Session ID shared across all tracking calls
+var CMG_SID = (function () {
+  var s = sessionStorage.getItem('cmg-sid');
+  if (!s) { s = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem('cmg-sid', s); }
+  return s;
+})();
+
 // ─────────────────────────────────────────────
 // PARTICLES
 // ─────────────────────────────────────────────
@@ -134,14 +141,9 @@
 // ONLINE COUNTER — real concurrent session count
 // ─────────────────────────────────────────────
 (function () {
-  var sid = sessionStorage.getItem('cmg-sid');
-  if (!sid) {
-    sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
-    sessionStorage.setItem('cmg-sid', sid);
-  }
   var el = document.getElementById('player-count');
   function ping() {
-    fetch('/api/ping', { method: 'POST', headers: { 'x-session-id': sid } })
+    fetch('/api/ping', { method: 'POST', headers: { 'x-session-id': CMG_SID } })
       .then(function (r) { return r.json(); })
       .then(function (d) { el.textContent = d.players; })
       .catch(function () {});
@@ -354,10 +356,6 @@ function drawZombie(canvas, fogOff) {
 // ─────────────────────────────────────────────
 // CARD GENERATION
 // ─────────────────────────────────────────────
-function randomPlayers() {
-  return Math.floor(Math.random() * 12) + 1;
-}
-
 function buildCard(game, index) {
   const isFirst  = index === 0;
   const isSecond = index === 1;
@@ -412,16 +410,19 @@ function buildCard(game, index) {
   playBtn.className = 'btn-play';
   playBtn.textContent = 'PLAY NOW';
 
-  const players = randomPlayers();
   const pb = document.createElement('div');
   pb.className = 'player-badge';
-  pb.innerHTML = '<div class="player-dot"></div>' + players + ' PLAYING';
+  pb.dataset.gameBadge = game.id;
+  pb.innerHTML = '<div class="player-dot"></div><span>-- PLAYING</span>';
 
   bottom.append(tags, playBtn);
   body.append(top, desc, bottom, pb);
   card.append(canvas, body);
 
   thumbAnimState[game.id] = { angle: 0, fogOff: 0, canvas: canvas };
+  card.addEventListener('click', function () {
+    fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': game.id } }).catch(function () {});
+  });
   return card;
 }
 
@@ -453,6 +454,25 @@ function buildComingSoon(index) {
   });
   grid.appendChild(buildComingSoon(GAMES.length));
   grid.appendChild(buildComingSoon(GAMES.length + 1));
+})();
+
+// ─────────────────────────────────────────────
+// PER-GAME PLAYER COUNTS
+// ─────────────────────────────────────────────
+(function () {
+  function fetchStats() {
+    fetch('/api/stats')
+      .then(function (r) { return r.json(); })
+      .then(function (stats) {
+        for (var id in stats) {
+          var span = document.querySelector('[data-game-badge="' + id + '"] span');
+          if (span) span.textContent = stats[id] + ' PLAYING';
+        }
+      })
+      .catch(function () {});
+  }
+  fetchStats();
+  setInterval(fetchStats, 30000);
 })();
 
 // ─────────────────────────────────────────────
