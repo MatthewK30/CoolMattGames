@@ -178,9 +178,6 @@ main {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
-.game-card.featured {
-  grid-column: span 2;
-}
 
 /* ── Game card ── */
 .game-card {
@@ -221,7 +218,6 @@ main {
   background: #07090d;
   object-fit: cover;
 }
-.game-card.featured .card-thumb { height: 300px; }
 
 /* ── Card body ── */
 .card-body {
@@ -245,7 +241,6 @@ main {
   letter-spacing: 2px;
   line-height: 1.05;
 }
-.game-card.featured .card-name { font-size: 30px; }
 
 .creator-badge {
   font-size: 10px;
@@ -613,7 +608,6 @@ footer a:hover { color: var(--text); }
 /* ── Responsive ── */
 @media (max-width: 1100px) {
   .games-grid { grid-template-columns: repeat(2, 1fr); }
-  .game-card.featured { grid-column: span 2; }
 }
 @media (max-width: 700px) {
   .games-grid { grid-template-columns: 1fr; }

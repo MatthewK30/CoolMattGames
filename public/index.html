@@ -454,8 +454,8 @@ function buildCard(game, index) {
     var canvas = document.createElement('canvas');
     canvas.className = 'card-thumb';
     canvas.id = 'thumb-' + game.id;
-    canvas.width  = featured ? 960 : 480;
-    canvas.height = featured ? 420 : 270;
+    canvas.width  = 480;
+    canvas.height = 270;
     card.insertBefore(canvas, img);
     img.remove();
     if (game.id === 'paintball' || game.id === 'zombie') {
