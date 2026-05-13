@@ -76,6 +76,12 @@
   </div>
 </footer>
 
+<div class="game-overlay" id="game-overlay">
+  <iframe id="game-frame" src="" allowfullscreen></iframe>
+  <button class="game-overlay-close" id="game-overlay-close" aria-label="Close game">&#x2715;</button>
+  <div class="game-overlay-watermark">coolmattgames.cool</div>
+</div>
+
 <div class="modal-overlay" id="add-game-overlay">
   <div class="modal">
     <div class="modal-title">ADD A GAME</div>
@@ -512,8 +518,10 @@ function buildCard(game, index) {
   bottom.append(tags, playBtn);
   body.append(top, desc, bottom, pb);
   card.append(img, body);
-  card.addEventListener('click', function () {
+  card.addEventListener('click', function (e) {
+    e.preventDefault();
     fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': game.id } }).catch(function () {});
+    openGameOverlay(game.url);
   });
   return card;
 }
@@ -689,6 +697,34 @@ async function renderCustomCards() {
     requestAnimationFrame(tick);
   }
   tick();
+})();
+
+// ─────────────────────────────────────────────
+// GAME OVERLAY
+// ─────────────────────────────────────────────
+(function () {
+  var overlay = document.getElementById('game-overlay');
+  var frame   = document.getElementById('game-frame');
+  var closeBtn = document.getElementById('game-overlay-close');
+
+  function openGameOverlay(url) {
+    frame.src = url;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGameOverlay() {
+    overlay.classList.remove('open');
+    frame.src = '';
+    document.body.style.overflow = '';
+  }
+
+  window.openGameOverlay = openGameOverlay;
+
+  closeBtn.addEventListener('click', closeGameOverlay);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeGameOverlay();
+  });
 })();
 </script>
 </body>
