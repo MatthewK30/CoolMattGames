@@ -216,11 +216,12 @@ main {
 /* ── Card thumbnail ── */
 .card-thumb {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 300px;
   display: block;
   background: #07090d;
+  object-fit: cover;
 }
-.game-card.featured .card-thumb { aspect-ratio: 16 / 8; }
+.game-card.featured .card-thumb { height: 300px; }
 
 /* ── Card body ── */
 .card-body {
@@ -359,7 +360,7 @@ main {
 }
 .cs-thumb {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 300px;
   background: repeating-linear-gradient(
     -45deg,
     rgba(255,255,255,0.012),
