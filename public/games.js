@@ -28,6 +28,16 @@ const GAMES = [
     tags: ['MULTIPLAYER', 'CARD GAME', 'STRATEGY'],
     color: '#c9a84c',
     featured: false
+  },
+  {
+    id: 'shadow-box',
+    name: 'SHADOW BOX',
+    description: 'Read them. Dodge them. Break them. 2-player online boxing — RPS meets mind games. Real-time WebSocket multiplayer.',
+    url: 'https://shadow-box-production.up.railway.app',
+    creator: 'AARUSH',
+    tags: ['MULTIPLAYER', 'FIGHTING', 'STRATEGY'],
+    color: '#a855f7',
+    featured: true
   }
 ]
 
