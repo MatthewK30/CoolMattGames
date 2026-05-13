@@ -5,24 +5,29 @@ const vm = require('vm')
 const { spawnSync } = require('child_process')
 const app = express()
 
-// ── Cover check on startup ────────────────────────────────────────────────────
-;(function checkCovers() {
+// ── Cover check on startup (games.js + gist) ─────────────────────────────────
+async function checkCovers() {
   try {
     const src = fs.readFileSync(path.join(__dirname, 'public', 'games.js'), 'utf8')
     const ctx = {}
     vm.runInNewContext(src.replace(/\bconst\s+GAMES\b/, 'GAMES'), ctx)
-    const games = ctx.GAMES || []
-    const anyMissing = games.some(
-      g => !fs.existsSync(path.join(__dirname, 'public', 'images', `${g.id}-cover.png`))
+    const local = ctx.GAMES || []
+    const gist = await readGames().catch(e => {
+      console.warn('Gist check skipped:', e.message)
+      return []
+    })
+    const all = [...local, ...gist]
+    const anyMissing = all.some(
+      g => g && g.id && !fs.existsSync(path.join(__dirname, 'public', 'images', `${g.id}-cover.png`))
     )
     if (anyMissing) {
       console.log('Cover images missing — running capture script...')
-      spawnSync('node', ['scripts/capture.js'], { stdio: 'inherit', cwd: __dirname })
+      spawnSync('node', ['scripts/capture.js'], { stdio: 'inherit', cwd: __dirname, env: process.env })
     }
   } catch (e) {
     console.warn('Cover check skipped:', e.message)
   }
-})()
+}
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json())
@@ -130,4 +135,6 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.ht
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')))
 
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => console.log('Server running on port ' + PORT))
+checkCovers().finally(() => {
+  app.listen(PORT, () => console.log('Server running on port ' + PORT))
+})
