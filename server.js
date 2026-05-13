@@ -1,6 +1,28 @@
 const express = require('express')
 const path = require('path')
+const fs = require('fs')
+const vm = require('vm')
+const { spawnSync } = require('child_process')
 const app = express()
+
+// ── Cover check on startup ────────────────────────────────────────────────────
+;(function checkCovers() {
+  try {
+    const src = fs.readFileSync(path.join(__dirname, 'public', 'games.js'), 'utf8')
+    const ctx = {}
+    vm.runInNewContext(src.replace(/\bconst\s+GAMES\b/, 'GAMES'), ctx)
+    const games = ctx.GAMES || []
+    const anyMissing = games.some(
+      g => !fs.existsSync(path.join(__dirname, 'public', 'images', `${g.id}-cover.png`))
+    )
+    if (anyMissing) {
+      console.log('Cover images missing — running capture script...')
+      spawnSync('node', ['scripts/capture.js'], { stdio: 'inherit', cwd: __dirname })
+    }
+  } catch (e) {
+    console.warn('Cover check skipped:', e.message)
+  }
+})()
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json())

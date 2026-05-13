@@ -5,9 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "capture": "node scripts/capture.js",
+    "setup": "npm install && npx playwright install chromium && npm run capture"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "playwright": "^1.60.0"
   }
 }
