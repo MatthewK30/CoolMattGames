@@ -33,7 +33,7 @@
 <main>
 
   <section class="hero">
-    <h1>MATTHEW'S GAME COLLECTION</h1>
+    <h1 class="glitch" data-text="MATTHEW'S GAME COLLECTION">MATTHEW'S GAME COLLECTION</h1>
     <p>Built from scratch.&nbsp;&nbsp;No rules.&nbsp;&nbsp;Pure skill.</p>
   </section>
 
@@ -159,6 +159,26 @@ var CMG_SID = (function () {
       if (d.x > W + 4) d.x = -4;
       if (d.y < -4) d.y = H + 4;
       if (d.y > H + 4) d.y = -4;
+    }
+    const LINK = 140;
+    const LINK_SQ = LINK * LINK;
+    ctx.lineWidth = 1;
+    for (let i = 0; i < dots.length; i++) {
+      for (let j = i + 1; j < dots.length; j++) {
+        const a = dots[i], b = dots[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < LINK_SQ) {
+          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.18;
+          ctx.strokeStyle = `rgba(204,21,21,${alpha})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+    for (const d of dots) {
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(204,21,21,${d.alpha})`;

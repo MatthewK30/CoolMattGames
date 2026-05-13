@@ -141,6 +141,46 @@ main {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.hero h1.glitch {
+  position: relative;
+  display: inline-block;
+}
+.hero h1.glitch::before,
+.hero h1.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  pointer-events: none;
+  opacity: 0;
+}
+.hero h1.glitch::before {
+  color: #00f0ff;
+  mix-blend-mode: screen;
+  animation: glitch-a 6s infinite steps(1);
+}
+.hero h1.glitch::after {
+  color: #ff2244;
+  mix-blend-mode: screen;
+  animation: glitch-b 6s infinite steps(1);
+}
+@keyframes glitch-a {
+  0%, 92%, 100% { opacity: 0; transform: translate(0, 0); clip-path: inset(0 0 100% 0); }
+  93%   { opacity: 0.85; transform: translate(-3px, 0); clip-path: inset(8% 0 70% 0); }
+  94%   { opacity: 0.7;  transform: translate(3px, -1px); clip-path: inset(40% 0 30% 0); }
+  95%   { opacity: 0.9;  transform: translate(-2px, 1px); clip-path: inset(70% 0 8% 0); }
+  96%   { opacity: 0;    transform: translate(0, 0); }
+}
+@keyframes glitch-b {
+  0%, 92%, 100% { opacity: 0; transform: translate(0, 0); clip-path: inset(0 0 100% 0); }
+  93%   { opacity: 0.75; transform: translate(3px, 1px); clip-path: inset(55% 0 12% 0); }
+  94%   { opacity: 0.85; transform: translate(-3px, 0); clip-path: inset(20% 0 60% 0); }
+  95%   { opacity: 0.7;  transform: translate(2px, -1px); clip-path: inset(78% 0 4% 0); }
+  96%   { opacity: 0;    transform: translate(0, 0); }
+}
 .hero p {
   font-size: 17px;
   font-weight: 500;
@@ -205,18 +245,20 @@ main {
   to { opacity: 1; transform: translateY(0); }
 }
 .game-card:hover {
-  transform: translateY(-5px) scale(1.015);
+  transform: translateY(-6px) scale(1.02);
   border-color: var(--accent);
-  box-shadow: 0 0 28px var(--accent-glow), 0 12px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 0 36px var(--accent-glow), 0 0 80px rgba(204,21,21,0.18), 0 14px 44px rgba(0,0,0,0.55);
 }
+.game-card:hover .card-thumb { transform: scale(1.08); }
 
 /* ── Card thumbnail ── */
 .card-thumb {
   width: 100%;
-  height: 300px;
+  height: 220px;
   display: block;
   background: #07090d;
   object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
 /* ── Card body ── */
@@ -264,25 +306,32 @@ main {
 
 .card-bottom {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
 .card-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 6px;
 }
 .tag {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1.5px;
-  padding: 2px 7px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
+  padding: 3px 9px;
+  background: rgba(204, 21, 21, 0.08);
+  border: 1px solid rgba(204, 21, 21, 0.35);
+  color: #f0bebe;
+  border-radius: 999px;
+  box-shadow: 0 0 8px rgba(204, 21, 21, 0.22), inset 0 0 6px rgba(204, 21, 21, 0.08);
+  transition: box-shadow 0.25s, color 0.25s, border-color 0.25s;
+}
+.game-card:hover .tag {
+  color: #ffe5e5;
+  border-color: rgba(204, 21, 21, 0.6);
+  box-shadow: 0 0 12px rgba(204, 21, 21, 0.45), inset 0 0 8px rgba(204, 21, 21, 0.18);
 }
 
 /* ── Play button ── */
@@ -290,7 +339,7 @@ main {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 15px;
   letter-spacing: 3px;
-  padding: 9px 22px;
+  padding: 11px 22px;
   background: var(--accent);
   color: #fff;
   border: none;
@@ -300,9 +349,10 @@ main {
   overflow: hidden;
   white-space: nowrap;
   text-decoration: none;
-  display: inline-block;
+  display: block;
+  width: 100%;
+  text-align: center;
   transition: background 0.2s, box-shadow 0.2s;
-  flex-shrink: 0;
 }
 .btn-play::after {
   content: '';
@@ -355,7 +405,7 @@ main {
 }
 .cs-thumb {
   width: 100%;
-  height: 300px;
+  height: 220px;
   background: repeating-linear-gradient(
     -45deg,
     rgba(255,255,255,0.012),
