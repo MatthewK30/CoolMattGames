@@ -7,7 +7,7 @@
   <meta name="description" content="A hub for games built by Matthew and friends. Free to play. No ads. No pay to win.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,76 +16,143 @@
 
 <header>
   <a href="#" class="logo">
-    <span class="cool">Cool</span><span class="matt">Matt</span><span class="games">Games</span>
+    <span class="logo-mark">M</span>
+    <span><span class="cool">Cool</span><span class="matt">Matt</span><span class="games">Games</span></span>
   </a>
-  <div class="tagline">PLAY. COMPETE. WIN.</div>
   <nav>
-    <a href="#">HOME</a>
     <a href="#games">GAMES</a>
     <a href="#about">ABOUT</a>
+    <a href="https://github.com/MatthewK30/CoolMattGames" target="_blank" rel="noopener">SOURCE</a>
   </nav>
-  <div class="online-counter">
+  <div class="online-pill">
     <div class="online-dot"></div>
-    ONLINE:&nbsp;<span id="player-count">--</span>&nbsp;PLAYERS
+    <span class="num" id="player-count">--</span>
+    <span class="lbl">ONLINE</span>
   </div>
+  <a href="https://github.com/MatthewK30" target="_blank" rel="noopener" class="gh-btn" aria-label="GitHub">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+    </svg>
+    GH
+  </a>
 </header>
 
 <main>
 
+  <!-- ─────── HERO ─────── -->
   <section class="hero">
-    <h1 class="glitch" data-text="MATTHEW'S GAME COLLECTION">MATTHEW'S GAME COLLECTION</h1>
-    <p>Built from scratch.&nbsp;&nbsp;No rules.&nbsp;&nbsp;Pure skill.</p>
+    <div class="hero-grid">
+      <div class="hero-left">
+        <h1>
+          <span class="line">Play.</span>
+          <span class="line">Compete.</span>
+          <span class="line accent">Win.</span>
+        </h1>
+        <p class="hero-sub">
+          Games built from scratch by Matthew and friends.
+          Browser-native. No ads, no pay-to-win, no install.
+          Pick one and start playing.
+        </p>
+        <div class="hero-actions">
+          <a href="#games" class="btn-primary">
+            BROWSE GAMES
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#about" class="btn-ghost">ABOUT THE CREW</a>
+        </div>
+
+        <div class="stat-strip">
+          <div>
+            <div class="stat-num" id="stat-games">--</div>
+            <div class="stat-lbl">Games Live</div>
+          </div>
+          <div>
+            <div class="stat-num" id="stat-online">--</div>
+            <div class="stat-lbl">Players Right Now</div>
+          </div>
+        </div>
+      </div>
+
+      <a href="#games" class="spotlight" id="spotlight" aria-label="Featured game">
+        <div class="spot-dots" id="spot-dots"></div>
+        <div class="spot-progress"></div>
+        <!-- slides injected here -->
+      </a>
+    </div>
   </section>
 
-  <section class="games-section" id="games">
-    <div class="section-label">ALL GAMES <button id="btn-add-game" class="btn-add-game">+ ADD GAME</button></div>
+  <!-- ─────── GAMES ─────── -->
+  <section class="section" id="games">
+    <div class="section-head">
+      <div class="section-head-left">
+        <span class="section-num">01 / LIBRARY</span>
+        <h2 class="section-title">All <span class="accent">Games</span></h2>
+        <span class="section-sub" id="games-count">— loading library</span>
+      </div>
+      <button id="btn-add-game" class="btn-add-game">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+        ADD GAME
+      </button>
+    </div>
+
+    <div class="filters" id="filters"></div>
+
     <div class="games-grid" id="games-grid"></div>
   </section>
 
-  <section class="about-section" id="about">
-    <h2>ABOUT</h2>
-    <p>
-      Independent games built by Matthew and friends. All games are free to
-      play — no ads, no pay to win. New games are added regularly as the
-      crew builds. Want to add yours? Open a pull request.
-    </p>
-    <div class="social-links">
-      <a href="https://github.com/MatthewK30" class="social-link" target="_blank" rel="noopener noreferrer">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483
-            0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608
-            1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338
-            -2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65
-            0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337
-            1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688
-            0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747
-            0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-        </svg>
-        MATTHEWK30
-      </a>
+  <!-- ─────── ABOUT ─────── -->
+  <section class="section" id="about">
+    <div class="section-head">
+      <div class="section-head-left">
+        <span class="section-num">02 / CREW</span>
+        <h2 class="section-title">About <span class="accent">/</span> Credits</h2>
+      </div>
+    </div>
+
+    <div class="about-grid">
+      <div>
+        <p>
+          <strong>CoolMattGames</strong> is a hub for independent browser games built by Matthew Khardalian and a rotating crew of friends. Every game on this page was made from scratch — handwritten engines, real-time multiplayer, custom art.
+        </p>
+        <p>
+          Everything here is <strong>free to play</strong>. No ads. No pay-to-win. No accounts. Open a tab, hit play, see how far you get. New drops land regularly as the crew ships.
+        </p>
+        <p>
+          Want to add yours? Drop a URL into <strong>Add Game</strong> above — it shows up instantly on the hub.
+        </p>
+      </div>
+
+      <div class="creator-cards" id="creator-cards"></div>
     </div>
   </section>
 
 </main>
 
 <footer>
-  <div>© 2026 CoolMattGames — Built by Matthew Khardalian</div>
+  <div class="foot-tag">
+    © 2026 <span class="accent">CoolMattGames</span> — Built by Matthew Khardalian
+  </div>
   <div class="foot-links">
     <a href="https://github.com/MatthewK30/CoolMattGames" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a href="#">Privacy</a>
+    <a href="#about">About</a>
+    <a href="#games">Games</a>
   </div>
 </footer>
 
+<!-- ─────── GAME OVERLAY ─────── -->
 <div class="game-overlay" id="game-overlay">
   <iframe id="game-frame" src="" allowfullscreen></iframe>
   <button class="game-overlay-close" id="game-overlay-close" aria-label="Close game">&#x2715;</button>
   <div class="game-overlay-watermark">coolmattgames.cool</div>
 </div>
 
+<!-- ─────── ADD GAME MODAL ─────── -->
 <div class="modal-overlay" id="add-game-overlay">
   <div class="modal">
     <div class="modal-title">ADD A GAME</div>
-    <div class="modal-sub">Saved to this browser — shows up on your hub every time you visit.</div>
+    <div class="modal-sub">Drop in any browser-playable URL — it shows up on the hub for everyone.</div>
     <form id="add-game-form" autocomplete="off">
       <div class="form-field">
         <label class="form-label" for="ag-url">GAME URL <span class="form-req">*</span></label>
@@ -113,7 +180,7 @@
 
 <script src="games.js"></script>
 <script>
-// Session ID shared across all tracking calls
+// Session ID
 var CMG_SID = (function () {
   var s = sessionStorage.getItem('cmg-sid');
   if (!s) { s = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem('cmg-sid', s); }
@@ -121,86 +188,70 @@ var CMG_SID = (function () {
 })();
 
 // ─────────────────────────────────────────────
-// PARTICLES
+// PARTICLES — subtle red drift
 // ─────────────────────────────────────────────
 (function () {
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
-  const COUNT = 60;
+  const COUNT = 50;
   let W, H, dots;
-
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   function makeDot() {
     return {
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.6 + 0.4,
-      vx: (Math.random() - 0.5) * 0.22,
-      vy: (Math.random() - 0.5) * 0.22,
-      alpha: Math.random() * 0.35 + 0.08
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.4 + 0.3,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.18,
+      alpha: Math.random() * 0.3 + 0.06
     };
   }
-
-  function init() {
-    resize();
-    dots = Array.from({ length: COUNT }, makeDot);
-  }
-
+  function init() { resize(); dots = Array.from({length: COUNT}, makeDot); }
   function tick() {
     ctx.clearRect(0, 0, W, H);
     for (const d of dots) {
-      d.x += d.vx;
-      d.y += d.vy;
-      if (d.x < -4) d.x = W + 4;
-      if (d.x > W + 4) d.x = -4;
-      if (d.y < -4) d.y = H + 4;
-      if (d.y > H + 4) d.y = -4;
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < -4) d.x = W + 4; if (d.x > W + 4) d.x = -4;
+      if (d.y < -4) d.y = H + 4; if (d.y > H + 4) d.y = -4;
     }
-    const LINK = 140;
-    const LINK_SQ = LINK * LINK;
+    const LINK = 130, LINK_SQ = LINK * LINK;
     ctx.lineWidth = 1;
     for (let i = 0; i < dots.length; i++) {
       for (let j = i + 1; j < dots.length; j++) {
         const a = dots[i], b = dots[j];
         const dx = a.x - b.x, dy = a.y - b.y;
-        const d2 = dx * dx + dy * dy;
+        const d2 = dx*dx + dy*dy;
         if (d2 < LINK_SQ) {
-          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.18;
-          ctx.strokeStyle = `rgba(204,21,21,${alpha})`;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
+          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.13;
+          ctx.strokeStyle = `rgba(255,31,61,${alpha})`;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
       }
     }
     for (const d of dots) {
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(204,21,21,${d.alpha})`;
+      ctx.fillStyle = `rgba(255,31,61,${d.alpha})`;
       ctx.fill();
     }
     requestAnimationFrame(tick);
   }
-
   window.addEventListener('resize', resize);
-  init();
-  tick();
+  init(); tick();
 })();
 
 // ─────────────────────────────────────────────
-// ONLINE COUNTER — real concurrent session count
+// ONLINE COUNTER
 // ─────────────────────────────────────────────
 (function () {
   var el = document.getElementById('player-count');
+  var heroEl = document.getElementById('stat-online');
   function ping() {
     fetch('/api/ping', { method: 'POST', headers: { 'x-session-id': CMG_SID } })
       .then(function (r) { return r.json(); })
-      .then(function (d) { el.textContent = d.players; })
+      .then(function (d) {
+        if (el) el.textContent = d.players;
+        if (heroEl) heroEl.textContent = d.players;
+      })
       .catch(function () {});
   }
   ping();
@@ -208,341 +259,237 @@ var CMG_SID = (function () {
 })();
 
 // ─────────────────────────────────────────────
-// CANVAS THUMBNAILS
+// SPOTLIGHT ROTATOR
 // ─────────────────────────────────────────────
-const thumbAnimState = {};
+function initSpotlight(games) {
+  var spot = document.getElementById('spotlight');
+  var dotsHost = document.getElementById('spot-dots');
+  if (!spot) return;
 
-function drawPaintball(canvas, angle) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  const cx = W / 2, cy = H / 2 - 10;
+  // Show featured first, then others
+  var ordered = games.slice().sort(function (a, b) {
+    return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+  }).slice(0, 4);
 
-  ctx.clearRect(0, 0, W, H);
+  // Clear (keep corners, dots host, progress)
+  var keep = ['spot-corners','spot-dots','spot-progress'];
+  Array.from(spot.children).forEach(function (c) {
+    var hasKeep = keep.some(function (k) { return c.classList && c.classList.contains(k); });
+    if (!hasKeep) c.remove();
+  });
 
-  // Background
-  ctx.fillStyle = '#080a0e';
-  ctx.fillRect(0, 0, W, H);
+  ordered.forEach(function (game, i) {
+    var slide = document.createElement('div');
+    slide.className = 'spotlight-slide' + (i === 0 ? ' active' : '');
+    slide.dataset.idx = i;
 
-  // Subtle red grid
-  ctx.strokeStyle = 'rgba(204,21,21,0.06)';
-  ctx.lineWidth = 1;
-  const gStep = Math.round(W / 10);
-  for (let x = 0; x < W; x += gStep) {
-    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    var img = document.createElement('div');
+    img.className = 'spotlight-img';
+    img.style.backgroundImage = "url('images/" + game.id + "-cover.png'), linear-gradient(135deg, " + game.color + "44, #07090d)";
+    // probe in case the image 404s — fall back to a painted canvas
+    (function (slideEl, g) {
+      var probe = new Image();
+      probe.onerror = function () {
+        var canvas = document.createElement('canvas');
+        canvas.width = 600; canvas.height = 750;
+        canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
+        drawPlaceholder(canvas, g.color, g.name);
+        slideEl.insertBefore(canvas, slideEl.firstChild);
+        slideEl.querySelector('.spotlight-img').style.display = 'none';
+      };
+      probe.src = 'images/' + g.id + '-cover.png';
+    })(slide, game);
+
+    var body = document.createElement('div');
+    body.className = 'spot-body';
+
+    var tags = document.createElement('div');
+    tags.className = 'spot-tags';
+    var hot = document.createElement('span');
+    hot.className = 'spot-tag hot';
+    hot.textContent = i === 0 ? 'NOW PLAYING' : 'FEATURED';
+    tags.appendChild(hot);
+    (game.tags || []).slice(0, 2).forEach(function (t) {
+      var s = document.createElement('span');
+      s.className = 'spot-tag';
+      s.textContent = t;
+      tags.appendChild(s);
+    });
+
+    var name = document.createElement('div');
+    name.className = 'spot-name';
+    name.textContent = game.name;
+
+    var desc = document.createElement('div');
+    desc.className = 'spot-desc';
+    desc.textContent = game.description;
+
+    var meta = document.createElement('div');
+    meta.className = 'spot-meta';
+    meta.innerHTML =
+      '<span>BY ' + game.creator + '</span>' +
+      '<span>·</span>' +
+      '<span data-game-badge-spot="' + game.id + '">-- LIVE</span>' +
+      '<span class="play-cta">PLAY <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>';
+
+    body.append(tags, name, desc, meta);
+    slide.append(img, body);
+    spot.appendChild(slide);
+
+    var dot = document.createElement('div');
+    dot.className = 'spot-dot' + (i === 0 ? ' active' : '');
+    dot.dataset.idx = i;
+    dot.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      go(i);
+    });
+    dotsHost.appendChild(dot);
+  });
+
+  var current = 0;
+  var slides = spot.querySelectorAll('.spotlight-slide');
+  var dots = dotsHost.querySelectorAll('.spot-dot');
+  function go(i) {
+    current = (i + slides.length) % slides.length;
+    slides.forEach(function (s, j) { s.classList.toggle('active', j === current); });
+    dots.forEach(function (d, j) { d.classList.toggle('active', j === current); });
   }
-  for (let y = 0; y < H; y += gStep) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-  }
+  var timer = setInterval(function () { go(current + 1); }, 7000);
 
-  // Paintball splats in corners
-  function splat(sx, sy, rad, alpha) {
-    const splatSeeds = [[0.3,0.2],[0.7,0.1],[1.1,0.4],[1.3,0.8],[1.0,1.2],[0.5,1.3],[0.1,0.9],[-0.1,0.5]];
-    ctx.fillStyle = `rgba(204,21,21,${alpha})`;
-    for (const [fx, fy] of splatSeeds) {
-      const bx = sx + Math.cos(fx * Math.PI) * rad * 0.55;
-      const by = sy + Math.sin(fy * Math.PI) * rad * 0.55;
-      ctx.beginPath();
-      ctx.ellipse(bx, by, rad * 0.28 + Math.sin(fx*3) * rad * 0.1, rad * 0.24, fx, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.beginPath();
-    ctx.arc(sx, sy, rad * 0.42, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  splat(28,  28,  22, 0.55);
-  splat(W-28, 28, 18, 0.45);
-  splat(28,  H-36, 20, 0.5);
-  splat(W-28, H-36, 24, 0.55);
-
-  // Rotating crosshair
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.rotate(angle);
-  const cr = Math.min(W, H) * 0.22;
-
-  ctx.strokeStyle = '#cc1515';
-  ctx.lineWidth = 2;
-  ctx.shadowColor = '#cc1515';
-  ctx.shadowBlur = 10;
-
-  // Outer ring
-  ctx.beginPath();
-  ctx.arc(0, 0, cr, 0, Math.PI * 2);
-  ctx.stroke();
-
-  // Tick marks
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 4; i++) {
-    const a = (i / 4) * Math.PI * 2;
-    const inner = cr * 0.6;
-    const outer = cr * 0.9;
-    ctx.beginPath();
-    ctx.moveTo(Math.cos(a) * inner, Math.sin(a) * inner);
-    ctx.lineTo(Math.cos(a) * outer, Math.sin(a) * outer);
-    ctx.stroke();
-  }
-
-  // Center dot
-  ctx.fillStyle = '#cc1515';
-  ctx.beginPath();
-  ctx.arc(0, 0, 4, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Cross lines
-  ctx.lineWidth = 1.5;
-  const cl = cr * 0.45;
-  ctx.beginPath(); ctx.moveTo(-cl, 0); ctx.lineTo(cl, 0); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(0, -cl); ctx.lineTo(0, cl); ctx.stroke();
-
-  ctx.restore();
-
-  // Text
-  ctx.shadowBlur = 0;
-  ctx.font = `bold ${Math.round(W * 0.028)}px 'Bebas Neue', sans-serif`;
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.textAlign = 'center';
-  ctx.letterSpacing = '3px';
-  ctx.fillText('2 STEPS AHEAD', cx, H - 14);
+  spot.addEventListener('click', function (e) {
+    var idx = current;
+    var g = ordered[idx];
+    if (!g) return;
+    e.preventDefault();
+    fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': g.id } }).catch(function () {});
+    openGameOverlay(g.url);
+  });
 }
 
-function drawZombie(canvas, fogOff) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
+// ─────────────────────────────────────────────
+// TICKER
+// ─────────────────────────────────────────────
+function initTicker(games) {
+  var track = document.getElementById('ticker-track');
+  if (!track) return;
+  var msgs = [];
+  games.forEach(function (g) {
+    msgs.push('NOW PLAYING — ' + g.name);
+  });
+  msgs.push('FREE TO PLAY');
+  msgs.push('NO ADS · NO PAY-TO-WIN · NO BS');
+  msgs.push('ADD YOUR GAME →');
+  msgs.push('BUILT FROM SCRATCH');
 
-  ctx.clearRect(0, 0, W, H);
-
-  // Background - dark green tint
-  ctx.fillStyle = '#0a1209';
-  ctx.fillRect(0, 0, W, H);
-
-  // Subtle scanlines
-  for (let y = 0; y < H; y += 4) {
-    ctx.fillStyle = 'rgba(0,0,0,0.12)';
-    ctx.fillRect(0, y, W, 1);
+  var html = '';
+  for (var i = 0; i < 2; i++) {
+    msgs.forEach(function (m) {
+      html += '<span>' + m + '</span><span class="star">✦</span>';
+    });
   }
-
-  // Vignette
-  const vig = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.8);
-  vig.addColorStop(0, 'transparent');
-  vig.addColorStop(1, 'rgba(0,0,0,0.55)');
-  ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, W, H);
-
-  // Zombie silhouette
-  const zx = W / 2, zy = H * 0.52;
-  const scale = H * 0.0035;
-
-  ctx.fillStyle = 'rgba(15,40,10,0.85)';
-
-  // Body
-  ctx.beginPath();
-  ctx.ellipse(zx, zy + 20*scale, 14*scale, 28*scale, 0, 0, Math.PI*2);
-  ctx.fill();
-
-  // Head
-  ctx.beginPath();
-  ctx.ellipse(zx - 2*scale, zy - 26*scale, 11*scale, 13*scale, -0.1, 0, Math.PI*2);
-  ctx.fill();
-
-  // Left arm raised up
-  ctx.beginPath();
-  ctx.moveTo(zx - 14*scale, zy - 4*scale);
-  ctx.quadraticCurveTo(zx - 32*scale, zy - 28*scale, zx - 38*scale, zy - 46*scale);
-  ctx.lineWidth = 8 * scale;
-  ctx.strokeStyle = 'rgba(15,40,10,0.85)';
-  ctx.stroke();
-
-  // Right arm reaching out
-  ctx.beginPath();
-  ctx.moveTo(zx + 14*scale, zy - 4*scale);
-  ctx.quadraticCurveTo(zx + 30*scale, zy - 12*scale, zx + 44*scale, zy - 18*scale);
-  ctx.lineWidth = 8 * scale;
-  ctx.stroke();
-
-  // Legs
-  ctx.lineWidth = 10 * scale;
-  ctx.beginPath();
-  ctx.moveTo(zx - 6*scale, zy + 46*scale);
-  ctx.lineTo(zx - 10*scale, zy + 76*scale);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(zx + 6*scale, zy + 46*scale);
-  ctx.lineTo(zx + 14*scale, zy + 76*scale);
-  ctx.stroke();
-
-  // Green eyes glow
-  ctx.fillStyle = 'rgba(40,220,60,0.7)';
-  ctx.shadowColor = '#22cc44';
-  ctx.shadowBlur = 8;
-  ctx.beginPath(); ctx.arc(zx - 5*scale, zy - 29*scale, 2.5*scale, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(zx + 3*scale, zy - 29*scale, 2.5*scale, 0, Math.PI*2); ctx.fill();
-  ctx.shadowBlur = 0;
-
-  // Animated fog at bottom
-  const fogH = H * 0.3;
-  const fogY = H - fogH;
-  for (let layer = 0; layer < 3; layer++) {
-    const grad = ctx.createLinearGradient(0, fogY + layer * 10, 0, H);
-    grad.addColorStop(0, 'transparent');
-    grad.addColorStop(1, `rgba(10,30,12,${0.4 + layer * 0.15})`);
-    ctx.fillStyle = grad;
-
-    ctx.beginPath();
-    ctx.moveTo(0, H);
-    const waveAmp = 12 + layer * 6;
-    const waveLen = W / (2 + layer);
-    const offset = (fogOff * (1 + layer * 0.4)) % waveLen;
-    for (let x = 0; x <= W + waveLen; x += 4) {
-      const waveY = fogY + 12 * layer + waveAmp * Math.sin(((x + offset) / waveLen) * Math.PI * 2);
-      ctx.lineTo(x, waveY);
-    }
-    ctx.lineTo(W, H);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  // Text
-  ctx.font = `bold ${Math.round(W * 0.028)}px 'Bebas Neue', sans-serif`;
-  ctx.fillStyle = 'rgba(100,220,80,0.55)';
-  ctx.textAlign = 'center';
-  ctx.fillText('ZOMBIE SURVIVAL', W / 2, H - 14);
-}
-
-function drawGeneric(canvas, color, name) {
-  var ctx = canvas.getContext('2d');
-  var W = canvas.width, H = canvas.height;
-  var hex = (color || '#555555').replace('#', '');
-  var r = parseInt(hex.slice(0,2),16)||85, g = parseInt(hex.slice(2,4),16)||85, b = parseInt(hex.slice(4,6),16)||85;
-
-  ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#080a0e';
-  ctx.fillRect(0, 0, W, H);
-
-  // Diagonal lines in the game's accent color
-  ctx.strokeStyle = 'rgba('+r+','+g+','+b+',0.09)';
-  ctx.lineWidth = 1;
-  var step = Math.round(H / 5);
-  for (var xi = -H; xi < W + H; xi += step) {
-    ctx.beginPath(); ctx.moveTo(xi, 0); ctx.lineTo(xi + H, H); ctx.stroke();
-  }
-
-  // Radial glow
-  var grd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, H * 0.55);
-  grd.addColorStop(0, 'rgba('+r+','+g+','+b+',0.22)');
-  grd.addColorStop(1, 'transparent');
-  ctx.fillStyle = grd;
-  ctx.fillRect(0, 0, W, H);
-
-  // Game name centered
-  var fs = Math.max(16, Math.round(H * 0.15));
-  ctx.font = fs + 'px "Bebas Neue", sans-serif';
-  ctx.fillStyle = 'rgba('+r+','+g+','+b+',0.9)';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.shadowColor = 'rgba('+r+','+g+','+b+',0.55)';
-  ctx.shadowBlur = 14;
-  var words = name.split(' ');
-  if (words.length <= 3) {
-    ctx.fillText(name, W/2, H/2);
-  } else {
-    var mid = Math.ceil(words.length / 2);
-    ctx.fillText(words.slice(0, mid).join(' '), W/2, H/2 - fs * 0.58);
-    ctx.fillText(words.slice(mid).join(' '), W/2, H/2 + fs * 0.58);
-  }
-  ctx.shadowBlur = 0;
-
-  // Accent border
-  ctx.strokeStyle = 'rgba('+r+','+g+','+b+',0.22)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(1, 1, W-2, H-2);
+  track.innerHTML = html;
 }
 
 // ─────────────────────────────────────────────
 // CARD GENERATION
 // ─────────────────────────────────────────────
-function buildCard(game, index) {
-  const isFirst  = index === 0;
-  const isSecond = index === 1;
-  const featured = game.featured;
-
+function buildCard(game, index, totalIndex) {
   const card = document.createElement('a');
-  card.className = 'game-card' + (featured ? ' featured' : '');
+  card.className = 'game-card';
   card.href = game.url;
   card.target = '_blank';
   card.rel = 'noopener noreferrer';
-  card.dataset.index = index;
+  card.dataset.index = totalIndex;
+  card.dataset.tags = (game.tags || []).join('|').toLowerCase();
+
+  // Thumb wrapper
+  const thumbWrap = document.createElement('div');
+  thumbWrap.className = 'card-thumb-wrap';
 
   const img = document.createElement('img');
-  img.className = 'card-thumb';
+  img.className = 'card-thumb-img';
   img.alt = game.name;
-  img.style.objectFit = 'cover';
+  img.loading = 'lazy';
+
+  // Fallback if image missing — paint a colorful placeholder
   img.addEventListener('error', function () {
     var canvas = document.createElement('canvas');
-    canvas.className = 'card-thumb';
-    canvas.id = 'thumb-' + game.id;
-    canvas.width  = 480;
-    canvas.height = 270;
-    card.insertBefore(canvas, img);
-    img.remove();
-    if (game.id === 'paintball' || game.id === 'zombie') {
-      thumbAnimState[game.id] = { angle: 0, fogOff: 0, canvas: canvas };
-    } else {
-      (function (c, g) {
-        document.fonts.ready.then(function () { drawGeneric(c, g.color, g.name); });
-      })(canvas, game);
-    }
+    canvas.className = 'card-thumb-img';
+    canvas.width = 480; canvas.height = 300;
+    thumbWrap.replaceChild(canvas, img);
+    drawPlaceholder(canvas, game.color, game.name);
   });
   img.src = 'images/' + game.id + '-cover.png';
 
+  // Badges
+  const badges = document.createElement('div');
+  badges.className = 'card-badges';
+  if (game.featured) {
+    const b = document.createElement('span');
+    b.className = 'card-badge hot';
+    b.textContent = '🔥 HOT';
+    b.textContent = 'HOT';
+    badges.appendChild(b);
+  }
+  if (game.custom) {
+    const b = document.createElement('span');
+    b.className = 'card-badge new';
+    b.textContent = 'NEW';
+    badges.appendChild(b);
+  }
+
+  // Player strip
+  const playerStrip = document.createElement('span');
+  playerStrip.className = 'card-player-strip';
+  playerStrip.dataset.gameBadge = game.id;
+  playerStrip.innerHTML = '<span class="dot"></span><span>-- LIVE</span>';
+
+  // Hover overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'card-thumb-overlay';
+  const playPill = document.createElement('span');
+  playPill.className = 'card-play-pill';
+  playPill.innerHTML = 'PLAY NOW <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+  overlay.appendChild(playPill);
+
+  thumbWrap.append(img, badges, playerStrip, overlay);
+
+  // Body
   const body = document.createElement('div');
   body.className = 'card-body';
-
   const top = document.createElement('div');
   top.className = 'card-top';
-
   const name = document.createElement('div');
   name.className = 'card-name';
   name.textContent = game.name;
-
   const badge = document.createElement('div');
   badge.className = 'creator-badge';
   badge.textContent = 'BY ' + game.creator;
-
   top.append(name, badge);
 
   const desc = document.createElement('div');
   desc.className = 'card-desc';
   desc.textContent = game.description;
 
-  const bottom = document.createElement('div');
-  bottom.className = 'card-bottom';
-
   const tags = document.createElement('div');
   tags.className = 'card-tags';
-  game.tags.forEach(function (t) {
+  (game.tags || []).forEach(function (t) {
     const span = document.createElement('span');
     span.className = 'tag';
     span.textContent = t;
     tags.appendChild(span);
   });
 
-  const playBtn = document.createElement('span');
-  playBtn.className = 'btn-play';
-  playBtn.textContent = 'PLAY NOW';
+  body.append(top, desc, tags);
+  card.append(thumbWrap, body);
 
-  const pb = document.createElement('div');
-  pb.className = 'player-badge';
-  pb.dataset.gameBadge = game.id;
-  pb.innerHTML = '<div class="player-dot"></div><span>-- PLAYING</span>';
-
-  bottom.append(tags, playBtn);
-  body.append(top, desc, bottom, pb);
-  card.append(img, body);
   card.addEventListener('click', function (e) {
     e.preventDefault();
     fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': game.id } }).catch(function () {});
     openGameOverlay(game.url);
   });
+
   return card;
 }
 
@@ -553,27 +500,145 @@ function buildComingSoon(index) {
 
   const thumb = document.createElement('div');
   thumb.className = 'cs-thumb';
-
-  const overlay = document.createElement('div');
-  overlay.className = 'cs-overlay';
-  overlay.innerHTML = '<span class="cs-label">COMING SOON</span><small class="cs-sub">NEW GAME IN DEVELOPMENT</small>';
+  thumb.innerHTML = '<span class="cs-label">COMING SOON</span><small class="cs-sub">SHIPPING SOON</small>';
 
   const body = document.createElement('div');
   body.className = 'cs-body';
   body.innerHTML = '<div class="cs-name">??????????</div><div class="cs-desc">Something new is brewing...</div>';
 
-  card.append(thumb, overlay, body);
+  card.append(thumb, body);
   return card;
 }
 
+function drawPlaceholder(canvas, color, name) {
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var hex = (color || '#cc1515').replace('#', '');
+  var r = parseInt(hex.slice(0,2),16)||204, g = parseInt(hex.slice(2,4),16)||21, b = parseInt(hex.slice(4,6),16)||21;
+
+  ctx.fillStyle = '#0b0e14'; ctx.fillRect(0, 0, W, H);
+  // diagonal stripes
+  ctx.strokeStyle = 'rgba('+r+','+g+','+b+',0.08)';
+  ctx.lineWidth = 1;
+  var step = Math.round(H / 8);
+  for (var xi = -H; xi < W + H; xi += step) {
+    ctx.beginPath(); ctx.moveTo(xi, 0); ctx.lineTo(xi + H, H); ctx.stroke();
+  }
+  // radial glow
+  var grd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, H * 0.6);
+  grd.addColorStop(0, 'rgba('+r+','+g+','+b+',0.32)');
+  grd.addColorStop(1, 'transparent');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+  // text
+  var fs = Math.max(18, Math.round(H * 0.16));
+  ctx.font = fs + 'px "Bebas Neue", sans-serif';
+  ctx.fillStyle = 'rgba('+r+','+g+','+b+',0.95)';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba('+r+','+g+','+b+',0.6)'; ctx.shadowBlur = 16;
+  var words = name.split(' ');
+  if (words.length <= 2) {
+    ctx.fillText(name, W/2, H/2);
+  } else {
+    var mid = Math.ceil(words.length / 2);
+    ctx.fillText(words.slice(0, mid).join(' '), W/2, H/2 - fs * 0.55);
+    ctx.fillText(words.slice(mid).join(' '), W/2, H/2 + fs * 0.55);
+  }
+  ctx.shadowBlur = 0;
+}
+
 // ─────────────────────────────────────────────
-// CUSTOM GAME STORAGE — localStorage (works on GitHub Pages)
+// FILTER CHIPS
+// ─────────────────────────────────────────────
+var currentFilter = 'all';
+function buildFilters(games) {
+  var host = document.getElementById('filters');
+  var counts = { all: games.length };
+  games.forEach(function (g) {
+    (g.tags || []).forEach(function (t) {
+      var k = t.toLowerCase();
+      counts[k] = (counts[k] || 0) + 1;
+    });
+  });
+  var entries = Object.keys(counts).filter(function (k) { return k !== 'all'; });
+  entries.sort(function (a, b) { return counts[b] - counts[a]; });
+  var chips = [{ key: 'all', label: 'ALL' }].concat(entries.map(function (k) {
+    return { key: k, label: k.toUpperCase() };
+  }));
+
+  host.innerHTML = '';
+  chips.forEach(function (c) {
+    var btn = document.createElement('button');
+    btn.className = 'chip' + (c.key === 'all' ? ' active' : '');
+    btn.dataset.filter = c.key;
+    btn.innerHTML = c.label + '<span class="count">' + counts[c.key] + '</span>';
+    btn.addEventListener('click', function () {
+      currentFilter = c.key;
+      host.querySelectorAll('.chip').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      applyFilter();
+    });
+    host.appendChild(btn);
+  });
+}
+
+function applyFilter() {
+  var cards = document.querySelectorAll('.game-card');
+  var visible = 0;
+  cards.forEach(function (c) {
+    var tags = (c.dataset.tags || '').split('|');
+    var show = currentFilter === 'all' || tags.indexOf(currentFilter) !== -1;
+    c.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  // Hide coming-soon when filtering
+  document.querySelectorAll('.coming-soon-card').forEach(function (c) {
+    c.style.display = currentFilter === 'all' ? '' : 'none';
+  });
+}
+
+// ─────────────────────────────────────────────
+// CREATOR CARDS
+// ─────────────────────────────────────────────
+function buildCreators(games) {
+  var host = document.getElementById('creator-cards');
+  if (!host) return;
+  var creators = {};
+  games.forEach(function (g) {
+    var c = g.creator || 'UNKNOWN';
+    if (!creators[c]) creators[c] = { name: c, games: [], }; 
+    creators[c].games.push(g);
+  });
+  var arr = Object.values(creators).sort(function (a, b) { return b.games.length - a.games.length; });
+  var ghMap = { 'MATTHEW': 'MatthewK30', 'AARUSH': 'doubleA-Digital' };
+  var colorMap = { 'MATTHEW': '', 'AARUSH': 'cyan' };
+  host.innerHTML = '';
+  arr.forEach(function (c) {
+    var row = document.createElement('div');
+    row.className = 'creator-row';
+    var initial = c.name.charAt(0);
+    var avatarClass = colorMap[c.name] || '';
+    var gh = ghMap[c.name];
+    row.innerHTML =
+      '<div class="creator-avatar ' + avatarClass + '">' + initial + '</div>' +
+      '<div>' +
+        '<div class="creator-name">' + c.name + '</div>' +
+        '<div class="creator-stats">' + c.games.length + ' GAME' + (c.games.length === 1 ? '' : 'S') + ' SHIPPED</div>' +
+      '</div>' +
+      (gh ? '<a href="https://github.com/' + gh + '" target="_blank" rel="noopener" class="gh-link" aria-label="GitHub of ' + c.name + '">' +
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>' +
+      '</a>' : '');
+    host.appendChild(row);
+  });
+}
+
+// ─────────────────────────────────────────────
+// CUSTOM GAME STORAGE
 // ─────────────────────────────────────────────
 var COLOR_PALETTE = ['#cc1515','#1560cc','#cc8800','#8815cc','#15cc78','#cc3377'];
-var CMG_STORAGE_KEY = 'cmg-custom-games';
 
 async function fetchCustomGames() {
-  try { return JSON.parse(localStorage.getItem(CMG_STORAGE_KEY) || '[]'); }
+  try { return await (await fetch('/api/custom-games')).json(); }
   catch (e) { return []; }
 }
 
@@ -583,7 +648,7 @@ async function renderCustomCards() {
   var anchor = grid.querySelector('.coming-soon-card');
   var games = await fetchCustomGames();
   games.forEach(function (game, i) {
-    var card = buildCard(game, GAMES.length + i);
+    var card = buildCard(game, i, GAMES.length + i);
     card.dataset.custom = 'true';
     var removeBtn = document.createElement('button');
     removeBtn.className = 'card-remove';
@@ -592,8 +657,7 @@ async function renderCustomCards() {
     removeBtn.addEventListener('click', async function (e) {
       e.preventDefault();
       e.stopPropagation();
-      var remaining = (await fetchCustomGames()).filter(function(g) { return g.id !== game.id; });
-      localStorage.setItem(CMG_STORAGE_KEY, JSON.stringify(remaining));
+      await fetch('/api/custom-games/' + encodeURIComponent(game.id), { method: 'DELETE' });
       renderCustomCards();
     });
     card.appendChild(removeBtn);
@@ -602,16 +666,30 @@ async function renderCustomCards() {
       setTimeout(function () { c.classList.add('animate-in'); }, delay);
     })(card, 60 + i * 90);
   });
+
+  // Update count
+  var total = GAMES.length + games.length;
+  var countEl = document.getElementById('games-count');
+  if (countEl) countEl.textContent = '— ' + total + ' game' + (total === 1 ? '' : 's') + ' in the library';
+  var statGames = document.getElementById('stat-games');
+  if (statGames) statGames.textContent = total;
 }
 
-// Build the grid
+// ─────────────────────────────────────────────
+// BUILD GRID
+// ─────────────────────────────────────────────
 (async function () {
   const grid = document.getElementById('games-grid');
   GAMES.forEach(function (game, i) {
-    grid.appendChild(buildCard(game, i));
+    grid.appendChild(buildCard(game, i, i));
   });
   grid.appendChild(buildComingSoon(GAMES.length));
   grid.appendChild(buildComingSoon(GAMES.length + 1));
+
+  initSpotlight(GAMES);
+  buildFilters(GAMES);
+  buildCreators(GAMES);
+
   await renderCustomCards();
 })();
 
@@ -624,8 +702,10 @@ async function renderCustomCards() {
       .then(function (r) { return r.json(); })
       .then(function (stats) {
         for (var id in stats) {
-          var span = document.querySelector('[data-game-badge="' + id + '"] span');
-          if (span) span.textContent = stats[id] + ' PLAYING';
+          var span = document.querySelector('[data-game-badge="' + id + '"] span:last-child');
+          if (span) span.textContent = stats[id] + ' LIVE';
+          var spot = document.querySelector('[data-game-badge-spot="' + id + '"]');
+          if (spot) spot.textContent = stats[id] + ' LIVE';
         }
       })
       .catch(function () {});
@@ -645,7 +725,7 @@ async function renderCustomCards() {
   var descInput    = document.getElementById('ag-desc');
   var creatorInput = document.getElementById('ag-creator');
 
-  function open() { overlay.classList.add('open'); urlInput.focus(); }
+  function open() { overlay.classList.add('open'); setTimeout(function () { urlInput.focus(); }, 100); }
   function close() { overlay.classList.remove('open'); }
 
   document.getElementById('btn-add-game').addEventListener('click', open);
@@ -671,9 +751,11 @@ async function renderCustomCards() {
       featured: false,
       custom: true
     };
-    var existing2 = await fetchCustomGames();
-    existing2.push(newGame);
-    localStorage.setItem(CMG_STORAGE_KEY, JSON.stringify(existing2));
+    await fetch('/api/custom-games', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newGame)
+    });
     await renderCustomCards();
     form.reset();
     close();
@@ -684,39 +766,22 @@ async function renderCustomCards() {
 // STAGGERED CARD ANIMATIONS
 // ─────────────────────────────────────────────
 (function () {
-  const cards = document.querySelectorAll('.game-card, .coming-soon-card');
   const observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
-        const delay = parseInt(entry.target.dataset.index || 0) * 110;
+        const delay = parseInt(entry.target.dataset.index || 0) * 90;
         setTimeout(function () {
           entry.target.classList.add('animate-in');
         }, delay);
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.08 });
-  cards.forEach(function (c) { observer.observe(c); });
-})();
-
-// ─────────────────────────────────────────────
-// THUMBNAIL ANIMATION LOOP
-// ─────────────────────────────────────────────
-(function () {
-  function tick() {
-    for (const id in thumbAnimState) {
-      const s = thumbAnimState[id];
-      if (id === 'paintball') {
-        s.angle += 0.006;
-        drawPaintball(s.canvas, s.angle);
-      } else if (id === 'zombie') {
-        s.fogOff = (s.fogOff + 0.4) % 1000;
-        drawZombie(s.canvas, s.fogOff);
-      }
-    }
-    requestAnimationFrame(tick);
-  }
-  tick();
+  }, { threshold: 0.06 });
+  // Defer to next tick so dynamic cards register
+  setTimeout(function () {
+    const cards = document.querySelectorAll('.game-card, .coming-soon-card');
+    cards.forEach(function (c) { observer.observe(c); });
+  }, 50);
 })();
 
 // ─────────────────────────────────────────────
@@ -732,15 +797,12 @@ async function renderCustomCards() {
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-
   function closeGameOverlay() {
     overlay.classList.remove('open');
     frame.src = '';
     document.body.style.overflow = '';
   }
-
   window.openGameOverlay = openGameOverlay;
-
   closeBtn.addEventListener('click', closeGameOverlay);
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && overlay.classList.contains('open')) closeGameOverlay();
