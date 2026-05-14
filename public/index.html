@@ -492,7 +492,7 @@ function buildCard(game, index) {
       })(canvas, game);
     }
   });
-  img.src = '/images/' + game.id + '-cover.png';
+  img.src = 'images/' + game.id + '-cover.png';
 
   const body = document.createElement('div');
   body.className = 'card-body';
@@ -567,12 +567,13 @@ function buildComingSoon(index) {
 }
 
 // ─────────────────────────────────────────────
-// CUSTOM GAME STORAGE — backed by GitHub Gist via /api/custom-games
+// CUSTOM GAME STORAGE — localStorage (works on GitHub Pages)
 // ─────────────────────────────────────────────
 var COLOR_PALETTE = ['#cc1515','#1560cc','#cc8800','#8815cc','#15cc78','#cc3377'];
+var CMG_STORAGE_KEY = 'cmg-custom-games';
 
 async function fetchCustomGames() {
-  try { return await (await fetch('/api/custom-games')).json(); }
+  try { return JSON.parse(localStorage.getItem(CMG_STORAGE_KEY) || '[]'); }
   catch (e) { return []; }
 }
 
@@ -591,7 +592,8 @@ async function renderCustomCards() {
     removeBtn.addEventListener('click', async function (e) {
       e.preventDefault();
       e.stopPropagation();
-      await fetch('/api/custom-games/' + encodeURIComponent(game.id), { method: 'DELETE' });
+      var remaining = (await fetchCustomGames()).filter(function(g) { return g.id !== game.id; });
+      localStorage.setItem(CMG_STORAGE_KEY, JSON.stringify(remaining));
       renderCustomCards();
     });
     card.appendChild(removeBtn);
@@ -669,11 +671,9 @@ async function renderCustomCards() {
       featured: false,
       custom: true
     };
-    await fetch('/api/custom-games', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newGame)
-    });
+    var existing2 = await fetchCustomGames();
+    existing2.push(newGame);
+    localStorage.setItem(CMG_STORAGE_KEY, JSON.stringify(existing2));
     await renderCustomCards();
     form.reset();
     close();
