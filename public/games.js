@@ -30,6 +30,16 @@ const GAMES = [
     featured: false
   },
   {
+    id: 'neon-drop',
+    name: 'NEON DROP',
+    description: 'Classic block-stacking with neon glow, combos, back-to-back bonuses, and a score multiplier that grows with every level.',
+    url: 'https://matteensekander.github.io/my-projects/neon_drop.html',
+    creator: 'MATTEEN',
+    tags: ['SOLO', 'PUZZLE', 'ARCADE'],
+    color: '#00f0f0',
+    featured: false
+  },
+  {
     id: 'shadow-box',
     name: 'SHADOW BOX',
     description: 'Read them. Dodge them. Break them. 2-player online boxing — RPS meets mind games. Real-time WebSocket multiplayer.',
