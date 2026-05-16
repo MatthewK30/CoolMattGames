@@ -48,6 +48,12 @@
     </svg>
     GH
   </a>
+  <button class="admin-portal-btn" id="admin-portal-btn" aria-label="Admin portal">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 21a8 8 0 0 0-16 0"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+  </button>
 </header>
 
 <main>
@@ -104,10 +110,6 @@
         <h2 class="section-title">All <span class="accent">Games</span></h2>
         <span class="section-sub" id="games-count">— loading library</span>
       </div>
-      <button id="btn-add-game" class="btn-add-game">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
-        ADD GAME
-      </button>
     </div>
 
     <div class="filters" id="filters"></div>
@@ -131,9 +133,6 @@
         </p>
         <p>
           Everything here is <strong>free to play</strong>. No ads. No pay-to-win. No accounts. Open a tab, hit play, see how far you get. New drops land regularly as the crew ships.
-        </p>
-        <p>
-          Want to add yours? Drop a URL into <strong>Add Game</strong> above — it shows up instantly on the hub.
         </p>
       </div>
 
@@ -161,33 +160,78 @@
   <div class="game-overlay-watermark">coolmattgames.cool</div>
 </div>
 
-<!-- ─────── ADD GAME MODAL ─────── -->
-<div class="modal-overlay" id="add-game-overlay">
+<!-- ─────── ADMIN LOGIN ─────── -->
+<div class="modal-overlay" id="admin-login-overlay" hidden>
   <div class="modal">
-    <div class="modal-title">ADD A GAME</div>
-    <div class="modal-sub">Drop in any browser-playable URL — it shows up on the hub for everyone.</div>
-    <form id="add-game-form" autocomplete="off">
+    <div class="modal-title">ADMIN PORTAL</div>
+    <div class="modal-sub">Enter the admin password to manage the library.</div>
+    <form id="admin-login-form" autocomplete="off">
       <div class="form-field">
-        <label class="form-label" for="ag-url">GAME URL <span class="form-req">*</span></label>
-        <input class="form-input" id="ag-url" type="text" placeholder="https://your-game.vercel.app" required>
+        <label class="form-label" for="admin-password">PASSWORD <span class="form-req">*</span></label>
+        <input class="form-input" id="admin-password" type="password" autocomplete="current-password" required>
       </div>
-      <div class="form-field">
-        <label class="form-label" for="ag-name">GAME NAME <span class="form-req">*</span></label>
-        <input class="form-input" id="ag-name" type="text" placeholder="MY AWESOME GAME" required maxlength="50">
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="ag-desc">DESCRIPTION <span style="opacity:.5">(optional)</span></label>
-        <input class="form-input" id="ag-desc" type="text" placeholder="One sentence about the game" maxlength="120">
-      </div>
-      <div class="form-field">
-        <label class="form-label" for="ag-creator">CREATOR <span style="opacity:.5">(optional)</span></label>
-        <input class="form-input" id="ag-creator" type="text" placeholder="YOUR NAME" maxlength="30">
-      </div>
+      <div class="form-error" id="admin-login-error" hidden>Wrong password.</div>
       <div class="form-actions">
-        <button type="submit" class="btn-modal-submit">ADD GAME</button>
-        <button type="button" class="btn-modal-cancel" id="ag-cancel">CANCEL</button>
+        <button type="submit" class="btn-modal-submit">LOGIN</button>
+        <button type="button" class="btn-modal-cancel" id="admin-login-cancel">CANCEL</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- ─────── ADMIN DASHBOARD ─────── -->
+<div class="modal-overlay" id="admin-dashboard-overlay" hidden>
+  <div class="modal admin-dashboard">
+    <div class="admin-dashboard-head">
+      <div>
+        <div class="modal-title">ADMIN DASHBOARD</div>
+        <div class="modal-sub">Add, edit, and remove games from the Gist-backed library.</div>
+      </div>
+      <button type="button" class="btn-modal-cancel" id="admin-logout">LOGOUT</button>
+    </div>
+
+    <div class="admin-dashboard-grid">
+      <form id="admin-game-form" autocomplete="off" class="admin-game-form">
+        <input id="admin-game-id" type="hidden">
+        <div class="admin-form-state" id="admin-form-state">ADDING NEW GAME</div>
+        <div class="form-field">
+          <label class="form-label" for="admin-name">NAME <span class="form-req">*</span></label>
+          <input class="form-input" id="admin-name" type="text" required maxlength="60">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="admin-desc">DESCRIPTION <span class="form-req">*</span></label>
+          <textarea class="form-input" id="admin-desc" rows="3" required maxlength="180"></textarea>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="admin-url">URL <span class="form-req">*</span></label>
+          <input class="form-input" id="admin-url" type="text" required>
+        </div>
+        <div class="admin-form-row">
+          <div class="form-field">
+            <label class="form-label" for="admin-creator">CREATOR <span class="form-req">*</span></label>
+            <input class="form-input" id="admin-creator" type="text" required maxlength="40">
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="admin-color">COLOR <span class="form-req">*</span></label>
+            <input class="form-input" id="admin-color" type="text" required maxlength="20" placeholder="#cc1515">
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="admin-tags">TAGS</label>
+          <input class="form-input" id="admin-tags" type="text" placeholder="MULTIPLAYER, FPS, ARCADE">
+        </div>
+        <div class="form-error" id="admin-save-error" hidden>Could not save changes.</div>
+        <div class="form-actions">
+          <button type="submit" class="btn-modal-submit" id="admin-submit">ADD GAME</button>
+          <button type="button" class="btn-modal-cancel" id="admin-reset-form">CLEAR</button>
+        </div>
+      </form>
+
+      <div class="admin-list-panel">
+        <div class="admin-list-title">EXISTING GAMES</div>
+        <div class="admin-game-list" id="admin-game-list"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -279,10 +323,13 @@ var CMG_SID = (function () {
 // ─────────────────────────────────────────────
 // SPOTLIGHT ROTATOR
 // ─────────────────────────────────────────────
+var spotlightTimer = null;
 function initSpotlight(games) {
   var spot = document.getElementById('spotlight');
   var dotsHost = document.getElementById('spot-dots');
   if (!spot) return;
+  if (spotlightTimer) clearInterval(spotlightTimer);
+  if (dotsHost) dotsHost.innerHTML = '';
 
   // Show featured first, then others
   var ordered = games.slice().sort(function (a, b) {
@@ -362,27 +409,28 @@ function initSpotlight(games) {
       e.stopPropagation();
       go(i);
     });
-    dotsHost.appendChild(dot);
+    if (dotsHost) dotsHost.appendChild(dot);
   });
 
   var current = 0;
   var slides = spot.querySelectorAll('.spotlight-slide');
-  var dots = dotsHost.querySelectorAll('.spot-dot');
+  var dots = dotsHost ? dotsHost.querySelectorAll('.spot-dot') : [];
   function go(i) {
+    if (!slides.length) return;
     current = (i + slides.length) % slides.length;
     slides.forEach(function (s, j) { s.classList.toggle('active', j === current); });
     dots.forEach(function (d, j) { d.classList.toggle('active', j === current); });
   }
-  var timer = setInterval(function () { go(current + 1); }, 7000);
+  if (slides.length > 1) spotlightTimer = setInterval(function () { go(current + 1); }, 7000);
 
-  spot.addEventListener('click', function (e) {
+  spot.onclick = function (e) {
     var idx = current;
     var g = ordered[idx];
     if (!g) return;
     e.preventDefault();
     fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': g.id } }).catch(function () {});
     openGameOverlay(g.url);
-  });
+  };
 }
 
 // ─────────────────────────────────────────────
@@ -397,7 +445,6 @@ function initTicker(games) {
   });
   msgs.push('FREE TO PLAY');
   msgs.push('NO ADS · NO PAY-TO-WIN · NO BS');
-  msgs.push('ADD YOUR GAME →');
   msgs.push('BUILT FROM SCRATCH');
 
   var html = '';
@@ -419,7 +466,9 @@ function buildCard(game, index, totalIndex) {
   card.target = '_blank';
   card.rel = 'noopener noreferrer';
   card.dataset.index = totalIndex;
+  card.dataset.gameId = game.id;
   card.dataset.tags = (game.tags || []).join('|').toLowerCase();
+  if (game.custom) card.dataset.custom = 'true';
 
   // Thumb wrapper
   const thumbWrap = document.createElement('div');
@@ -654,61 +703,87 @@ function buildCreators(games) {
 // CUSTOM GAME STORAGE
 // ─────────────────────────────────────────────
 var COLOR_PALETTE = ['#cc1515','#1560cc','#cc8800','#8815cc','#15cc78','#cc3377'];
+var ADMIN_SESSION_KEY = 'cmg-admin-session';
+var storedGames = [];
+var activeGames = [];
+function renderAdminGameList() {}
 
 async function fetchCustomGames() {
-  try { return await (await fetch('/api/custom-games')).json(); }
+  try {
+    var data = await (await fetch('/api/custom-games')).json();
+    return Array.isArray(data) ? data : [];
+  }
   catch (e) { return []; }
 }
 
-async function renderCustomCards() {
-  document.querySelectorAll('.game-card[data-custom]').forEach(function (c) { c.remove(); });
-  var grid = document.getElementById('games-grid');
-  var anchor = grid.querySelector('.coming-soon-card');
-  var games = await fetchCustomGames();
-  games.forEach(function (game, i) {
-    var card = buildCard(game, i, GAMES.length + i);
-    card.dataset.custom = 'true';
-    var removeBtn = document.createElement('button');
-    removeBtn.className = 'card-remove';
-    removeBtn.setAttribute('aria-label', 'Remove ' + game.name);
-    removeBtn.innerHTML = '&times;';
-    removeBtn.addEventListener('click', async function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      await fetch('/api/custom-games/' + encodeURIComponent(game.id), { method: 'DELETE' });
-      renderCustomCards();
-    });
-    card.appendChild(removeBtn);
-    grid.insertBefore(card, anchor || null);
-    (function (c, delay) {
-      setTimeout(function () { c.classList.add('animate-in'); }, delay);
-    })(card, 60 + i * 90);
+function mergeLibrary(gistGames) {
+  var localIds = {};
+  var map = {};
+  var order = [];
+  GAMES.forEach(function (game) {
+    localIds[game.id] = true;
+    map[game.id] = Object.assign({}, game);
+    order.push(game.id);
   });
+  (gistGames || []).forEach(function (game) {
+    if (!game || !game.id) return;
+    if (game.removed) {
+      delete map[game.id];
+      if (order.indexOf(game.id) === -1) order.push(game.id);
+      return;
+    }
+    var merged = Object.assign({}, map[game.id] || {}, game);
+    merged.custom = !localIds[game.id] || !!game.custom;
+    if (order.indexOf(game.id) === -1) order.push(game.id);
+    map[game.id] = merged;
+  });
+  return order.filter(function (id) { return !!map[id]; }).map(function (id) { return map[id]; });
+}
 
-  // Update count
-  var total = GAMES.length + games.length;
+function updateLibraryCount(total) {
   var countEl = document.getElementById('games-count');
   if (countEl) countEl.textContent = '— ' + total + ' game' + (total === 1 ? '' : 's') + ' in the library';
   var statGames = document.getElementById('stat-games');
   if (statGames) statGames.textContent = total;
 }
 
+function animateCards() {
+  var cards = document.querySelectorAll('.game-card, .coming-soon-card');
+  cards.forEach(function (card) {
+    var delay = parseInt(card.dataset.index || 0) * 70;
+    setTimeout(function () { card.classList.add('animate-in'); }, delay);
+  });
+}
+
+function renderGrid(games) {
+  var grid = document.getElementById('games-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  games.forEach(function (game, i) {
+    grid.appendChild(buildCard(game, i, i));
+  });
+  grid.appendChild(buildComingSoon(games.length));
+  grid.appendChild(buildComingSoon(games.length + 1));
+  animateCards();
+}
+
+async function refreshLibrary() {
+  storedGames = await fetchCustomGames();
+  activeGames = mergeLibrary(storedGames);
+  currentFilter = 'all';
+  renderGrid(activeGames);
+  initSpotlight(activeGames);
+  buildFilters(activeGames);
+  buildCreators(activeGames);
+  updateLibraryCount(activeGames.length);
+  renderAdminGameList();
+}
+
 // ─────────────────────────────────────────────
 // BUILD GRID
 // ─────────────────────────────────────────────
 (async function () {
-  const grid = document.getElementById('games-grid');
-  GAMES.forEach(function (game, i) {
-    grid.appendChild(buildCard(game, i, i));
-  });
-  grid.appendChild(buildComingSoon(GAMES.length));
-  grid.appendChild(buildComingSoon(GAMES.length + 1));
-
-  initSpotlight(GAMES);
-  buildFilters(GAMES);
-  buildCreators(GAMES);
-
-  await renderCustomCards();
+  await refreshLibrary();
 })();
 
 // ─────────────────────────────────────────────
@@ -733,51 +808,245 @@ async function renderCustomCards() {
 })();
 
 // ─────────────────────────────────────────────
-// ADD GAME MODAL
+// ADMIN PORTAL
 // ─────────────────────────────────────────────
 (function () {
-  var overlay  = document.getElementById('add-game-overlay');
-  var form     = document.getElementById('add-game-form');
-  var urlInput = document.getElementById('ag-url');
-  var nameInput    = document.getElementById('ag-name');
-  var descInput    = document.getElementById('ag-desc');
-  var creatorInput = document.getElementById('ag-creator');
+  var portalBtn = document.getElementById('admin-portal-btn');
+  var loginOverlay = document.getElementById('admin-login-overlay');
+  var dashboardOverlay = document.getElementById('admin-dashboard-overlay');
+  var loginForm = document.getElementById('admin-login-form');
+  var passwordInput = document.getElementById('admin-password');
+  var loginError = document.getElementById('admin-login-error');
+  var gameForm = document.getElementById('admin-game-form');
+  var gameIdInput = document.getElementById('admin-game-id');
+  var nameInput = document.getElementById('admin-name');
+  var descInput = document.getElementById('admin-desc');
+  var urlInput = document.getElementById('admin-url');
+  var creatorInput = document.getElementById('admin-creator');
+  var colorInput = document.getElementById('admin-color');
+  var tagsInput = document.getElementById('admin-tags');
+  var formState = document.getElementById('admin-form-state');
+  var submitBtn = document.getElementById('admin-submit');
+  var saveError = document.getElementById('admin-save-error');
 
-  function open() { overlay.classList.add('open'); setTimeout(function () { urlInput.focus(); }, 100); }
-  function close() { overlay.classList.remove('open'); }
+  function getAdminToken() { return localStorage.getItem(ADMIN_SESSION_KEY); }
+  function setAdminToken(token) { localStorage.setItem(ADMIN_SESSION_KEY, token); }
+  function clearAdminToken() { localStorage.removeItem(ADMIN_SESSION_KEY); }
 
-  document.getElementById('btn-add-game').addEventListener('click', open);
-  document.getElementById('ag-cancel').addEventListener('click', close);
-  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  function openModal(overlay) {
+    overlay.hidden = false;
+    requestAnimationFrame(function () { overlay.classList.add('open'); });
+  }
 
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
+  function closeModal(overlay) {
+    overlay.classList.remove('open');
+    setTimeout(function () { if (!overlay.classList.contains('open')) overlay.hidden = true; }, 220);
+  }
+
+  function openLogin() {
+    loginError.hidden = true;
+    passwordInput.value = '';
+    openModal(loginOverlay);
+    setTimeout(function () { passwordInput.focus(); }, 100);
+  }
+
+  function closeLogin() { closeModal(loginOverlay); }
+
+  async function hasValidAdminSession() {
+    if (!getAdminToken()) return false;
+    try {
+      var r = await fetch('/api/admin/session', { headers: { 'x-admin-session': getAdminToken() } });
+      if (r.ok) return true;
+    } catch (e) {}
+    clearAdminToken();
+    return false;
+  }
+
+  async function openDashboard() {
+    if (!(await hasValidAdminSession())) return openLogin();
+    renderAdminGameList();
+    openModal(dashboardOverlay);
+  }
+
+  function closeDashboard() { closeModal(dashboardOverlay); }
+
+  async function adminRequest(url, options) {
+    options = options || {};
+    options.headers = Object.assign({}, options.headers || {}, { 'x-admin-session': getAdminToken() || '' });
+    var r = await fetch(url, options);
+    if (r.status === 401) {
+      clearAdminToken();
+      closeDashboard();
+      openLogin();
+      throw new Error('Unauthorized');
+    }
+    if (!r.ok) throw new Error('Request failed');
+    return r.json();
+  }
+
+  function findGame(id) {
+    return activeGames.find(function (game) { return game.id === id; });
+  }
+
+  function slugify(name) {
+    return (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'custom-game';
+  }
+
+  function newGameId(name) {
+    var base = slugify(name);
+    var ids = {};
+    activeGames.concat(storedGames).forEach(function (game) { if (game && game.id) ids[game.id] = true; });
+    return ids[base] ? base + '-' + Date.now() : base;
+  }
+
+  function parseTags(value) {
+    return (value || '').split(',').map(function (tag) {
+      return tag.trim().toUpperCase();
+    }).filter(Boolean);
+  }
+
+  function resetGameForm() {
+    gameForm.reset();
+    gameIdInput.value = '';
+    formState.textContent = 'ADDING NEW GAME';
+    submitBtn.textContent = 'ADD GAME';
+    saveError.hidden = true;
+  }
+
+  function editGame(game) {
+    gameIdInput.value = game.id;
+    nameInput.value = game.name || '';
+    descInput.value = game.description || '';
+    urlInput.value = game.url || '';
+    creatorInput.value = game.creator || '';
+    colorInput.value = game.color || '#cc1515';
+    tagsInput.value = (game.tags || []).join(', ');
+    formState.textContent = 'EDITING ' + (game.name || game.id);
+    submitBtn.textContent = 'SAVE GAME';
+    saveError.hidden = true;
+    nameInput.focus();
+  }
+
+  function buildGameFromForm(existing) {
     var url = urlInput.value.trim();
-    var name = nameInput.value.trim();
-    if (!url || !name) return;
-    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-    var existing = await fetchCustomGames();
-    var newGame = {
-      id: 'custom-' + Date.now(),
-      name: name.toUpperCase(),
-      description: descInput.value.trim() || 'Added from the hub.',
+    var color = colorInput.value.trim() || COLOR_PALETTE[storedGames.length % COLOR_PALETTE.length];
+    if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
+    if (color && color.charAt(0) !== '#') color = '#' + color;
+    return {
+      id: existing ? existing.id : newGameId(nameInput.value),
+      name: nameInput.value.trim().toUpperCase(),
+      description: descInput.value.trim(),
       url: url,
-      creator: (creatorInput.value.trim() || 'UNKNOWN').toUpperCase(),
-      tags: [],
-      color: COLOR_PALETTE[existing.length % COLOR_PALETTE.length],
-      featured: false,
-      custom: true
+      creator: creatorInput.value.trim().toUpperCase(),
+      tags: parseTags(tagsInput.value),
+      color: color,
+      featured: existing ? !!existing.featured : false,
+      custom: existing ? !!existing.custom : true
     };
-    await fetch('/api/custom-games', {
+  }
+
+  loginForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    loginError.hidden = true;
+    var r = await fetch('/api/admin/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newGame)
+      body: JSON.stringify({ password: passwordInput.value })
     });
-    await renderCustomCards();
-    form.reset();
-    close();
+    if (!r.ok) {
+      loginError.hidden = false;
+      return;
+    }
+    var data = await r.json();
+    setAdminToken(data.token);
+    closeLogin();
+    await openDashboard();
   });
+
+  gameForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    saveError.hidden = true;
+    var existing = gameIdInput.value ? findGame(gameIdInput.value) : null;
+    var game = buildGameFromForm(existing);
+    try {
+      if (existing) {
+        await adminRequest('/api/custom-games/' + encodeURIComponent(existing.id), {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(game)
+        });
+      } else {
+        await adminRequest('/api/custom-games', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(game)
+        });
+      }
+      resetGameForm();
+      await refreshLibrary();
+    } catch (err) {
+      saveError.hidden = false;
+    }
+  });
+
+  document.getElementById('admin-reset-form').addEventListener('click', resetGameForm);
+  document.getElementById('admin-login-cancel').addEventListener('click', closeLogin);
+  document.getElementById('admin-logout').addEventListener('click', function () {
+    clearAdminToken();
+    resetGameForm();
+    closeDashboard();
+  });
+  portalBtn.addEventListener('click', async function () { getAdminToken() ? await openDashboard() : openLogin(); });
+  loginOverlay.addEventListener('click', function (e) { if (e.target === loginOverlay) closeLogin(); });
+  dashboardOverlay.addEventListener('click', function (e) { if (e.target === dashboardOverlay) closeDashboard(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (loginOverlay.classList.contains('open')) closeLogin();
+    if (dashboardOverlay.classList.contains('open')) closeDashboard();
+  });
+
+  renderAdminGameList = function () {
+    var list = document.getElementById('admin-game-list');
+    if (!list || !getAdminToken()) return;
+    list.innerHTML = '';
+    activeGames.forEach(function (game) {
+      var row = document.createElement('div');
+      row.className = 'admin-game-row';
+      var info = document.createElement('div');
+      info.className = 'admin-game-info';
+      var name = document.createElement('div');
+      name.className = 'admin-game-name';
+      name.textContent = game.name;
+      var meta = document.createElement('div');
+      meta.className = 'admin-game-meta';
+      meta.textContent = 'BY ' + game.creator + ' · ' + (game.tags || []).join(', ');
+      info.append(name, meta);
+      var actions = document.createElement('div');
+      actions.className = 'admin-game-actions';
+      var edit = document.createElement('button');
+      edit.type = 'button';
+      edit.className = 'admin-row-btn';
+      edit.textContent = 'EDIT';
+      edit.addEventListener('click', function () { editGame(game); });
+      var remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'admin-row-btn danger';
+      remove.textContent = 'REMOVE';
+      remove.addEventListener('click', async function () {
+        if (!confirm('Remove ' + game.name + '?')) return;
+        try {
+          await adminRequest('/api/custom-games/' + encodeURIComponent(game.id), { method: 'DELETE' });
+          resetGameForm();
+          await refreshLibrary();
+        } catch (err) {
+          saveError.hidden = false;
+        }
+      });
+      actions.append(edit, remove);
+      row.append(info, actions);
+      list.appendChild(row);
+    });
+  };
 })();
 
 // ─────────────────────────────────────────────
