@@ -221,6 +221,11 @@ var CMG_SID = (function () {
   function init() { resize(); dots = Array.from({length: COUNT}, makeDot); }
   function tick() {
     ctx.clearRect(0, 0, W, H);
+    // Skip drawing in light mode — canvas is also hidden via CSS, but skip the work
+    if (document.documentElement.getAttribute('data-theme') === 'light') {
+      requestAnimationFrame(tick);
+      return;
+    }
     for (const d of dots) {
       d.x += d.vx; d.y += d.vy;
       if (d.x < -4) d.x = W + 4; if (d.x > W + 4) d.x = -4;
@@ -235,7 +240,7 @@ var CMG_SID = (function () {
         const d2 = dx*dx + dy*dy;
         if (d2 < LINK_SQ) {
           const alpha = (1 - Math.sqrt(d2) / LINK) * 0.13;
-          ctx.strokeStyle = `rgba(255,31,61,${alpha})`;
+          ctx.strokeStyle = `rgba(204,21,21,${alpha})`;
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
       }
@@ -243,7 +248,7 @@ var CMG_SID = (function () {
     for (const d of dots) {
       ctx.beginPath();
       ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,31,61,${d.alpha})`;
+      ctx.fillStyle = `rgba(204,21,21,${d.alpha})`;
       ctx.fill();
     }
     requestAnimationFrame(tick);
@@ -803,13 +808,22 @@ async function renderCustomCards() {
 (function () {
   var btn = document.getElementById('theme-toggle');
   if (!btn) return;
+  var html = document.documentElement;
+  var transitionTimer;
   btn.addEventListener('click', function () {
-    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    // Trigger smooth crossfade for ~450ms
+    html.classList.add('theme-transitioning');
+    clearTimeout(transitionTimer);
+    transitionTimer = setTimeout(function () {
+      html.classList.remove('theme-transitioning');
+    }, 480);
+
+    var isLight = html.getAttribute('data-theme') === 'light';
     if (isLight) {
-      document.documentElement.removeAttribute('data-theme');
+      html.removeAttribute('data-theme');
       localStorage.setItem('cmg-theme', 'dark');
     } else {
-      document.documentElement.setAttribute('data-theme', 'light');
+      html.setAttribute('data-theme', 'light');
       localStorage.setItem('cmg-theme', 'light');
     }
   });
