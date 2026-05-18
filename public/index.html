@@ -206,15 +206,9 @@
           <label class="form-label" for="admin-url">URL <span class="form-req">*</span></label>
           <input class="form-input" id="admin-url" type="text" required>
         </div>
-        <div class="admin-form-row">
-          <div class="form-field">
-            <label class="form-label" for="admin-creator">CREATOR <span class="form-req">*</span></label>
-            <input class="form-input" id="admin-creator" type="text" required maxlength="40">
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="admin-color">COLOR <span class="form-req">*</span></label>
-            <input class="form-input" id="admin-color" type="text" required maxlength="20" placeholder="#cc1515">
-          </div>
+        <div class="form-field">
+          <label class="form-label" for="admin-creator">CREATOR <span class="form-req">*</span></label>
+          <input class="form-input" id="admin-creator" type="text" required maxlength="40">
         </div>
         <div class="form-field">
           <label class="form-label" for="admin-tags">TAGS</label>
@@ -324,6 +318,14 @@ var CMG_SID = (function () {
 // SPOTLIGHT ROTATOR
 // ─────────────────────────────────────────────
 var spotlightTimer = null;
+function getGameColor(game) {
+  return game.color || '#cc1515';
+}
+function coverUrl(game) {
+  var url = 'images/' + game.id + '-cover.png';
+  if (game.coverVersion) url += '?v=' + encodeURIComponent(game.coverVersion);
+  return url;
+}
 function initSpotlight(games) {
   var spot = document.getElementById('spotlight');
   var dotsHost = document.getElementById('spot-dots');
@@ -350,7 +352,7 @@ function initSpotlight(games) {
 
     var img = document.createElement('div');
     img.className = 'spotlight-img';
-    img.style.backgroundImage = "url('images/" + game.id + "-cover.png'), linear-gradient(135deg, " + game.color + "44, #07090d)";
+    img.style.backgroundImage = "url('" + coverUrl(game) + "'), linear-gradient(135deg, " + getGameColor(game) + "44, #07090d)";
     // probe in case the image 404s — fall back to a painted canvas
     (function (slideEl, g) {
       var probe = new Image();
@@ -358,11 +360,11 @@ function initSpotlight(games) {
         var canvas = document.createElement('canvas');
         canvas.width = 600; canvas.height = 750;
         canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
-        drawPlaceholder(canvas, g.color, g.name);
+        drawPlaceholder(canvas, getGameColor(g), g.name);
         slideEl.insertBefore(canvas, slideEl.firstChild);
         slideEl.querySelector('.spotlight-img').style.display = 'none';
       };
-      probe.src = 'images/' + g.id + '-cover.png';
+      probe.src = coverUrl(g);
     })(slide, game);
 
     var body = document.createElement('div');
@@ -485,9 +487,9 @@ function buildCard(game, index, totalIndex) {
     canvas.className = 'card-thumb-img';
     canvas.width = 480; canvas.height = 300;
     thumbWrap.replaceChild(canvas, img);
-    drawPlaceholder(canvas, game.color, game.name);
+    drawPlaceholder(canvas, getGameColor(game), game.name);
   });
-  img.src = 'images/' + game.id + '-cover.png';
+  img.src = coverUrl(game);
 
   // Badges
   const badges = document.createElement('div');
@@ -702,7 +704,6 @@ function buildCreators(games) {
 // ─────────────────────────────────────────────
 // CUSTOM GAME STORAGE
 // ─────────────────────────────────────────────
-var COLOR_PALETTE = ['#cc1515','#1560cc','#cc8800','#8815cc','#15cc78','#cc3377'];
 var ADMIN_SESSION_KEY = 'cmg-admin-session';
 var storedGames = [];
 var activeGames = [];
@@ -823,7 +824,6 @@ async function refreshLibrary() {
   var descInput = document.getElementById('admin-desc');
   var urlInput = document.getElementById('admin-url');
   var creatorInput = document.getElementById('admin-creator');
-  var colorInput = document.getElementById('admin-color');
   var tagsInput = document.getElementById('admin-tags');
   var formState = document.getElementById('admin-form-state');
   var submitBtn = document.getElementById('admin-submit');
@@ -919,7 +919,6 @@ async function refreshLibrary() {
     descInput.value = game.description || '';
     urlInput.value = game.url || '';
     creatorInput.value = game.creator || '';
-    colorInput.value = game.color || '#cc1515';
     tagsInput.value = (game.tags || []).join(', ');
     formState.textContent = 'EDITING ' + (game.name || game.id);
     submitBtn.textContent = 'SAVE GAME';
@@ -929,9 +928,7 @@ async function refreshLibrary() {
 
   function buildGameFromForm(existing) {
     var url = urlInput.value.trim();
-    var color = colorInput.value.trim() || COLOR_PALETTE[storedGames.length % COLOR_PALETTE.length];
     if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
-    if (color && color.charAt(0) !== '#') color = '#' + color;
     return {
       id: existing ? existing.id : newGameId(nameInput.value),
       name: nameInput.value.trim().toUpperCase(),
@@ -939,7 +936,6 @@ async function refreshLibrary() {
       url: url,
       creator: creatorInput.value.trim().toUpperCase(),
       tags: parseTags(tagsInput.value),
-      color: color,
       featured: existing ? !!existing.featured : false,
       custom: existing ? !!existing.custom : true
     };

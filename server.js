@@ -3,14 +3,53 @@ const path = require('path')
 const fs = require('fs')
 const vm = require('vm')
 const crypto = require('crypto')
+const { chromium } = require('playwright')
 const { spawnSync } = require('child_process')
 const app = express()
+
+const IMAGES_DIR = path.join(__dirname, 'public', 'images')
 
 function loadLocalGames() {
   const src = fs.readFileSync(path.join(__dirname, 'public', 'games.js'), 'utf8')
   const ctx = {}
   vm.runInNewContext(src.replace(/\bconst\s+GAMES\b/, 'GAMES'), ctx)
   return ctx.GAMES || []
+}
+
+function coverPathFor(gameId) {
+  if (!/^[a-z0-9-]+$/i.test(gameId)) throw new Error('Invalid game id')
+  return path.join(IMAGES_DIR, `${gameId}-cover.png`)
+}
+
+async function captureGameCover(game) {
+  if (!game?.id || !game?.url) return false
+  if (!fs.existsSync(IMAGES_DIR)) fs.mkdirSync(IMAGES_DIR, { recursive: true })
+
+  const browser = await chromium.launch()
+  let page
+  try {
+    page = await browser.newPage()
+    await page.setViewportSize({ width: 1280, height: 720 })
+    await page.goto(game.url, { waitUntil: 'load', timeout: 30000 })
+    await new Promise(resolve => setTimeout(resolve, 4000))
+    await page.screenshot({ path: coverPathFor(game.id) })
+    return true
+  } finally {
+    if (page) await page.close().catch(() => {})
+    await browser.close().catch(() => {})
+  }
+}
+
+async function updateGameCover(game) {
+  try {
+    if (await captureGameCover(game)) {
+      game.coverVersion = Date.now()
+      return true
+    }
+  } catch (e) {
+    console.warn(`Cover capture failed for ${game.id}: ${e.message}`)
+  }
+  return false
 }
 
 // ── Cover check on startup (games.js + gist) ─────────────────────────────────
@@ -23,7 +62,7 @@ async function checkCovers() {
     })
     const all = [...local, ...gist].filter(g => !g.removed)
     const anyMissing = all.some(
-      g => g && g.id && !fs.existsSync(path.join(__dirname, 'public', 'images', `${g.id}-cover.png`))
+      g => g && g.id && /^[a-z0-9-]+$/i.test(g.id) && !fs.existsSync(coverPathFor(g.id))
     )
     if (anyMissing) {
       console.log('Cover images missing — running capture script...')
@@ -170,9 +209,12 @@ app.get('/api/custom-games', async (req, res) => {
 app.post('/api/custom-games', requireAdmin, async (req, res) => {
   try {
     const game = req.body
-    if (!game?.id || !game?.name || !game?.url) return res.status(400).json({ error: 'Missing fields' })
+    if (!game?.id || !/^[a-z0-9-]+$/i.test(game.id) || !game?.name || !game?.url) return res.status(400).json({ error: 'Missing fields' })
+    delete game.color
+    delete game.removed
+    await updateGameCover(game)
     const games = await readGames()
-    games.push(game)
+    upsertGame(games, game)
     await writeGames(games)
     res.json({ ok: true })
   } catch (e) { res.status(500).json({ error: 'Storage error' }) }
@@ -181,10 +223,14 @@ app.post('/api/custom-games', requireAdmin, async (req, res) => {
 app.put('/api/custom-games/:id', requireAdmin, async (req, res) => {
   try {
     const game = req.body
-    if (!game?.name || !game?.url) return res.status(400).json({ error: 'Missing fields' })
+    if (!/^[a-z0-9-]+$/i.test(req.params.id) || !game?.name || !game?.url) return res.status(400).json({ error: 'Missing fields' })
     const games = await readGames()
+    const existing = games.find(g => g && g.id === req.params.id) || loadLocalGames().find(g => g.id === req.params.id)
     delete game.removed
+    delete game.color
     game.id = req.params.id
+    if (existing?.coverVersion) game.coverVersion = existing.coverVersion
+    if (!fs.existsSync(coverPathFor(game.id)) || !existing || existing.url !== game.url) await updateGameCover(game)
     upsertGame(games, game)
     await writeGames(games)
     res.json({ ok: true })

@@ -45,7 +45,8 @@ async function run() {
 
   const seen = new Set()
   const games = [...local, ...gist].filter(g => {
-    if (!g || !g.id || !g.url) return false
+    if (!g || g.removed || !g.id || !g.url) return false
+    if (!/^[a-z0-9-]+$/i.test(g.id)) return false
     if (seen.has(g.id)) return false
     seen.add(g.id)
     return true

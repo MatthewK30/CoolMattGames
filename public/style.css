@@ -1198,11 +1198,6 @@ textarea.form-input { resize: vertical; min-height: 92px; }
   text-transform: uppercase;
   margin-bottom: 12px;
 }
-.admin-form-row {
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  gap: 12px;
-}
 .admin-list-panel {
   min-width: 0;
 }
@@ -1616,7 +1611,6 @@ textarea.form-input { resize: vertical; min-height: 92px; }
   .stat-strip { grid-template-columns: 1fr 1fr; }
   .section-head { flex-direction: column; align-items: flex-start; gap: 14px; }
   .admin-dashboard-grid { grid-template-columns: 1fr; }
-  .admin-form-row { grid-template-columns: 1fr; }
   .admin-game-row { align-items: flex-start; flex-direction: column; }
   .admin-game-actions { width: 100%; }
   .admin-row-btn { flex: 1; }
