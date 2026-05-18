@@ -998,8 +998,26 @@ async function refreshLibrary() {
     precomputeBtn.disabled = true;
     precomputeBtn.textContent = 'PRECOMPUTING...';
     try {
-      var result = await adminRequest('/api/custom-games/precompute-covers', { method: 'POST' });
-      precomputeBtn.textContent = 'UPDATED ' + result.updated;
+      var seen = {};
+      var ids = [];
+      storedGames.forEach(function (game) {
+        if (!game || game.removed || !game.id || !game.url || game.coverImage || seen[game.id]) return;
+        seen[game.id] = true;
+        ids.push(game.id);
+      });
+      var updated = 0;
+      var failed = 0;
+      for (var i = 0; i < ids.length; i++) {
+        precomputeBtn.textContent = 'PRECOMPUTING ' + (i + 1) + '/' + ids.length;
+        var result = await adminRequest('/api/custom-games/precompute-covers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: ids[i] })
+        });
+        updated += result.updated || 0;
+        failed += result.failed || 0;
+      }
+      precomputeBtn.textContent = failed ? 'UPDATED ' + updated + ' / FAILED ' + failed : 'UPDATED ' + updated;
       await refreshLibrary();
       setTimeout(function () { precomputeBtn.textContent = 'PRECOMPUTE COVERS'; }, 1600);
     } catch (err) {

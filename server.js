@@ -72,18 +72,25 @@ async function updateGameCover(game) {
   return false
 }
 
-async function ensureGistCoverImages(games) {
+async function ensureGistCoverImages(games, options = {}) {
   if (!GIST_ID || !GH_TOKEN) return { games, updated: 0, failed: 0 }
-  const missing = games.filter(needsEmbeddedCover)
+  const targetId = typeof options.id === 'string' ? options.id : ''
+  const missing = games.filter(game => needsEmbeddedCover(game) && (!targetId || game.id === targetId))
   if (missing.length === 0) return { games, updated: 0, failed: 0 }
   let updated = 0
   let failed = 0
+  const coverCache = new Map()
   const browser = await launchBrowser()
   try {
-    await Promise.all(missing.map(async game => {
+    for (const game of missing) {
       try {
-        const coverImage = await captureGameCoverDataWithBrowser(game, browser)
-        if (!coverImage) { failed++; return }
+        const cacheKey = game.url
+        let coverImage = coverCache.get(cacheKey)
+        if (!coverCache.has(cacheKey)) {
+          coverImage = await captureGameCoverDataWithBrowser(game, browser)
+          coverCache.set(cacheKey, coverImage)
+        }
+        if (!coverImage) { failed++; continue }
         game.coverImage = coverImage
         game.coverVersion = Date.now()
         updated++
@@ -91,7 +98,7 @@ async function ensureGistCoverImages(games) {
         failed++
         console.warn(`Cover capture failed for ${game.id}: ${e.message}`)
       }
-    }))
+    }
   } finally {
     await browser.close().catch(() => {})
   }
@@ -250,7 +257,8 @@ app.get('/api/custom-games', async (req, res) => {
 
 app.post('/api/custom-games/precompute-covers', requireAdmin, async (req, res) => {
   try {
-    const result = await ensureGistCoverImages(await readGames())
+    const id = typeof req.body?.id === 'string' ? req.body.id : ''
+    const result = await ensureGistCoverImages(await readGames(), { id })
     res.json({ ok: true, updated: result.updated, failed: result.failed })
   } catch (e) { res.status(500).json({ error: 'Cover precompute failed' }) }
 })
