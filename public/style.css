@@ -1183,6 +1183,11 @@ textarea.form-input { resize: vertical; min-height: 92px; }
   margin-bottom: 8px;
 }
 .admin-dashboard-head .modal-sub { margin-bottom: 0; }
+.admin-dashboard-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
 .admin-dashboard-grid {
   display: grid;
   grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);

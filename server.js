@@ -4,6 +4,7 @@ const fs = require('fs')
 const vm = require('vm')
 const crypto = require('crypto')
 const { chromium } = require('playwright')
+const serverlessChromium = require('@sparticuz/chromium')
 const { spawnSync } = require('child_process')
 const app = express()
 
@@ -25,6 +26,17 @@ function needsEmbeddedCover(game) {
   return !!(game && !game.removed && game.id && /^[a-z0-9-]+$/i.test(game.id) && game.url && !game.coverImage)
 }
 
+async function launchBrowser() {
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    return chromium.launch({
+      args: serverlessChromium.args,
+      executablePath: await serverlessChromium.executablePath(),
+      headless: true
+    })
+  }
+  return chromium.launch()
+}
+
 async function captureGameCoverDataWithBrowser(game, browser) {
   if (!game?.id || !game?.url) return null
   let page
@@ -41,7 +53,7 @@ async function captureGameCoverDataWithBrowser(game, browser) {
 }
 
 async function captureGameCoverData(game) {
-  const browser = await chromium.launch()
+  const browser = await launchBrowser()
   try { return await captureGameCoverDataWithBrowser(game, browser) }
   finally { await browser.close().catch(() => {}) }
 }
@@ -61,41 +73,36 @@ async function updateGameCover(game) {
 }
 
 async function ensureGistCoverImages(games) {
-  if (!GIST_ID || !GH_TOKEN) return games
+  if (!GIST_ID || !GH_TOKEN) return { games, updated: 0, failed: 0 }
   const missing = games.filter(needsEmbeddedCover)
-  if (missing.length === 0) return games
-  let changed = false
-  const browser = await chromium.launch()
+  if (missing.length === 0) return { games, updated: 0, failed: 0 }
+  let updated = 0
+  let failed = 0
+  const browser = await launchBrowser()
   try {
     await Promise.all(missing.map(async game => {
       try {
         const coverImage = await captureGameCoverDataWithBrowser(game, browser)
-        if (!coverImage) return
+        if (!coverImage) { failed++; return }
         game.coverImage = coverImage
         game.coverVersion = Date.now()
-        changed = true
+        updated++
       } catch (e) {
+        failed++
         console.warn(`Cover capture failed for ${game.id}: ${e.message}`)
       }
     }))
   } finally {
     await browser.close().catch(() => {})
   }
-  if (changed) {
-    try { await writeGames(games) }
-    catch (e) { console.warn(`Cover backfill save failed: ${e.message}`) }
-  }
-  return games
+  if (updated) await writeGames(games)
+  return { games, updated, failed }
 }
 
 // ── Cover check on startup (games.js + gist) ─────────────────────────────────
 async function checkCovers() {
   try {
     const local = loadLocalGames()
-    const gist = await readGames().catch(e => {
-      console.warn('Gist check skipped:', e.message)
-      return []
-    })
     const anyMissing = local.some(
       g => g && g.id && /^[a-z0-9-]+$/i.test(g.id) && !fs.existsSync(coverPathFor(g.id))
     )
@@ -103,7 +110,6 @@ async function checkCovers() {
       console.log('Cover images missing — running capture script...')
       spawnSync('node', ['scripts/capture.js'], { stdio: 'inherit', cwd: __dirname, env: process.env })
     }
-    await ensureGistCoverImages(gist)
   } catch (e) {
     console.warn('Cover check skipped:', e.message)
   }
@@ -238,8 +244,15 @@ app.get('/api/admin/session', requireAdmin, (req, res) => {
 })
 
 app.get('/api/custom-games', async (req, res) => {
-  try { res.json(await ensureGistCoverImages(await readGames())) }
+  try { res.json(await readGames()) }
   catch (e) { res.json([]) }
+})
+
+app.post('/api/custom-games/precompute-covers', requireAdmin, async (req, res) => {
+  try {
+    const result = await ensureGistCoverImages(await readGames())
+    res.json({ ok: true, updated: result.updated, failed: result.failed })
+  } catch (e) { res.status(500).json({ error: 'Cover precompute failed' }) }
 })
 
 app.post('/api/custom-games', requireAdmin, async (req, res) => {
@@ -249,6 +262,7 @@ app.post('/api/custom-games', requireAdmin, async (req, res) => {
     delete game.color
     delete game.removed
     const coverCaptured = await updateGameCover(game)
+    if (!coverCaptured) return res.status(500).json({ error: 'Cover capture failed' })
     const games = await readGames()
     upsertGame(games, game)
     await writeGames(games)
@@ -268,7 +282,10 @@ app.put('/api/custom-games/:id', requireAdmin, async (req, res) => {
     if (existing?.coverImage) game.coverImage = existing.coverImage
     if (existing?.coverVersion) game.coverVersion = existing.coverVersion
     let coverCaptured = false
-    if (!game.coverImage || !existing || existing.url !== game.url) coverCaptured = await updateGameCover(game)
+    if (!game.coverImage || !existing || existing.url !== game.url) {
+      coverCaptured = await updateGameCover(game)
+      if (!coverCaptured) return res.status(500).json({ error: 'Cover capture failed' })
+    }
     upsertGame(games, game)
     await writeGames(games)
     res.json({ ok: true, coverCaptured })

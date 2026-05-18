@@ -189,6 +189,9 @@
       </div>
       <button type="button" class="btn-modal-cancel" id="admin-logout">LOGOUT</button>
     </div>
+    <div class="admin-dashboard-actions">
+      <button type="button" class="btn-modal-cancel" id="admin-precompute-covers">PRECOMPUTE COVERS</button>
+    </div>
 
     <div class="admin-dashboard-grid">
       <form id="admin-game-form" autocomplete="off" class="admin-game-form">
@@ -830,6 +833,7 @@ async function refreshLibrary() {
   var tagsInput = document.getElementById('admin-tags');
   var formState = document.getElementById('admin-form-state');
   var submitBtn = document.getElementById('admin-submit');
+  var precomputeBtn = document.getElementById('admin-precompute-covers');
   var saveError = document.getElementById('admin-save-error');
 
   function getAdminToken() { return localStorage.getItem(ADMIN_SESSION_KEY); }
@@ -989,6 +993,22 @@ async function refreshLibrary() {
   });
 
   document.getElementById('admin-reset-form').addEventListener('click', resetGameForm);
+  precomputeBtn.addEventListener('click', async function () {
+    saveError.hidden = true;
+    precomputeBtn.disabled = true;
+    precomputeBtn.textContent = 'PRECOMPUTING...';
+    try {
+      var result = await adminRequest('/api/custom-games/precompute-covers', { method: 'POST' });
+      precomputeBtn.textContent = 'UPDATED ' + result.updated;
+      await refreshLibrary();
+      setTimeout(function () { precomputeBtn.textContent = 'PRECOMPUTE COVERS'; }, 1600);
+    } catch (err) {
+      saveError.hidden = false;
+      precomputeBtn.textContent = 'PRECOMPUTE COVERS';
+    } finally {
+      precomputeBtn.disabled = false;
+    }
+  });
   document.getElementById('admin-login-cancel').addEventListener('click', closeLogin);
   document.getElementById('admin-logout').addEventListener('click', function () {
     clearAdminToken();
