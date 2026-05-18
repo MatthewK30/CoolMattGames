@@ -21,19 +21,17 @@ function coverPathFor(gameId) {
   return path.join(IMAGES_DIR, `${gameId}-cover.png`)
 }
 
-async function captureGameCover(game) {
-  if (!game?.id || !game?.url) return false
-  if (!fs.existsSync(IMAGES_DIR)) fs.mkdirSync(IMAGES_DIR, { recursive: true })
-
+async function captureGameCoverData(game) {
+  if (!game?.id || !game?.url) return null
   const browser = await chromium.launch()
   let page
   try {
     page = await browser.newPage()
-    await page.setViewportSize({ width: 1280, height: 720 })
+    await page.setViewportSize({ width: 960, height: 540 })
     await page.goto(game.url, { waitUntil: 'load', timeout: 30000 })
     await new Promise(resolve => setTimeout(resolve, 4000))
-    await page.screenshot({ path: coverPathFor(game.id) })
-    return true
+    const shot = await page.screenshot({ type: 'jpeg', quality: 72 })
+    return `data:image/jpeg;base64,${shot.toString('base64')}`
   } finally {
     if (page) await page.close().catch(() => {})
     await browser.close().catch(() => {})
@@ -42,7 +40,9 @@ async function captureGameCover(game) {
 
 async function updateGameCover(game) {
   try {
-    if (await captureGameCover(game)) {
+    const coverImage = await captureGameCoverData(game)
+    if (coverImage) {
+      game.coverImage = coverImage
       game.coverVersion = Date.now()
       return true
     }
@@ -212,11 +212,11 @@ app.post('/api/custom-games', requireAdmin, async (req, res) => {
     if (!game?.id || !/^[a-z0-9-]+$/i.test(game.id) || !game?.name || !game?.url) return res.status(400).json({ error: 'Missing fields' })
     delete game.color
     delete game.removed
-    await updateGameCover(game)
+    const coverCaptured = await updateGameCover(game)
     const games = await readGames()
     upsertGame(games, game)
     await writeGames(games)
-    res.json({ ok: true })
+    res.json({ ok: true, coverCaptured })
   } catch (e) { res.status(500).json({ error: 'Storage error' }) }
 })
 
@@ -229,11 +229,13 @@ app.put('/api/custom-games/:id', requireAdmin, async (req, res) => {
     delete game.removed
     delete game.color
     game.id = req.params.id
+    if (existing?.coverImage) game.coverImage = existing.coverImage
     if (existing?.coverVersion) game.coverVersion = existing.coverVersion
-    if (!fs.existsSync(coverPathFor(game.id)) || !existing || existing.url !== game.url) await updateGameCover(game)
+    let coverCaptured = false
+    if (!game.coverImage || !existing || existing.url !== game.url) coverCaptured = await updateGameCover(game)
     upsertGame(games, game)
     await writeGames(games)
-    res.json({ ok: true })
+    res.json({ ok: true, coverCaptured })
   } catch (e) { res.status(500).json({ error: 'Storage error' }) }
 })
 

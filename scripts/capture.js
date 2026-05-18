@@ -5,6 +5,8 @@ const vm = require('vm')
 
 const ROOT = path.join(__dirname, '..')
 const IMAGES_DIR = path.join(ROOT, 'public', 'images')
+const FORCE = process.argv.includes('--force')
+const LOCAL_ONLY = process.argv.includes('--local-only')
 
 function loadLocalGames() {
   const src = fs.readFileSync(path.join(ROOT, 'public', 'games.js'), 'utf8')
@@ -41,7 +43,7 @@ async function loadGistGames() {
 
 async function run() {
   const local = loadLocalGames()
-  const gist = await loadGistGames()
+  const gist = LOCAL_ONLY ? [] : await loadGistGames()
 
   const seen = new Set()
   const games = [...local, ...gist].filter(g => {
@@ -54,7 +56,7 @@ async function run() {
 
   if (!fs.existsSync(IMAGES_DIR)) fs.mkdirSync(IMAGES_DIR, { recursive: true })
 
-  const missing = games.filter(g => !fs.existsSync(path.join(IMAGES_DIR, `${g.id}-cover.png`)))
+  const missing = FORCE ? games : games.filter(g => !fs.existsSync(path.join(IMAGES_DIR, `${g.id}-cover.png`)))
   if (missing.length === 0) {
     console.log('All covers present, skipping capture.')
     return
