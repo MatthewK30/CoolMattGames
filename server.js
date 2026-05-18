@@ -21,9 +21,12 @@ function coverPathFor(gameId) {
   return path.join(IMAGES_DIR, `${gameId}-cover.png`)
 }
 
-async function captureGameCoverData(game) {
+function needsEmbeddedCover(game) {
+  return !!(game && !game.removed && game.id && /^[a-z0-9-]+$/i.test(game.id) && game.url && !game.coverImage)
+}
+
+async function captureGameCoverDataWithBrowser(game, browser) {
   if (!game?.id || !game?.url) return null
-  const browser = await chromium.launch()
   let page
   try {
     page = await browser.newPage()
@@ -34,8 +37,13 @@ async function captureGameCoverData(game) {
     return `data:image/jpeg;base64,${shot.toString('base64')}`
   } finally {
     if (page) await page.close().catch(() => {})
-    await browser.close().catch(() => {})
   }
+}
+
+async function captureGameCoverData(game) {
+  const browser = await chromium.launch()
+  try { return await captureGameCoverDataWithBrowser(game, browser) }
+  finally { await browser.close().catch(() => {}) }
 }
 
 async function updateGameCover(game) {
@@ -52,6 +60,34 @@ async function updateGameCover(game) {
   return false
 }
 
+async function ensureGistCoverImages(games) {
+  if (!GIST_ID || !GH_TOKEN) return games
+  const missing = games.filter(needsEmbeddedCover)
+  if (missing.length === 0) return games
+  let changed = false
+  const browser = await chromium.launch()
+  try {
+    await Promise.all(missing.map(async game => {
+      try {
+        const coverImage = await captureGameCoverDataWithBrowser(game, browser)
+        if (!coverImage) return
+        game.coverImage = coverImage
+        game.coverVersion = Date.now()
+        changed = true
+      } catch (e) {
+        console.warn(`Cover capture failed for ${game.id}: ${e.message}`)
+      }
+    }))
+  } finally {
+    await browser.close().catch(() => {})
+  }
+  if (changed) {
+    try { await writeGames(games) }
+    catch (e) { console.warn(`Cover backfill save failed: ${e.message}`) }
+  }
+  return games
+}
+
 // ── Cover check on startup (games.js + gist) ─────────────────────────────────
 async function checkCovers() {
   try {
@@ -60,14 +96,14 @@ async function checkCovers() {
       console.warn('Gist check skipped:', e.message)
       return []
     })
-    const all = [...local, ...gist].filter(g => !g.removed)
-    const anyMissing = all.some(
+    const anyMissing = local.some(
       g => g && g.id && /^[a-z0-9-]+$/i.test(g.id) && !fs.existsSync(coverPathFor(g.id))
     )
     if (anyMissing) {
       console.log('Cover images missing — running capture script...')
       spawnSync('node', ['scripts/capture.js'], { stdio: 'inherit', cwd: __dirname, env: process.env })
     }
+    await ensureGistCoverImages(gist)
   } catch (e) {
     console.warn('Cover check skipped:', e.message)
   }
@@ -202,7 +238,7 @@ app.get('/api/admin/session', requireAdmin, (req, res) => {
 })
 
 app.get('/api/custom-games', async (req, res) => {
-  try { res.json(await readGames()) }
+  try { res.json(await ensureGistCoverImages(await readGames())) }
   catch (e) { res.json([]) }
 })
 

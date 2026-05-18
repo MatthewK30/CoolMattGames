@@ -322,13 +322,8 @@ var STATIC_COVER_VERSION = '20260518-1';
 function getGameColor(game) {
   return game.color || '#cc1515';
 }
-function remoteScreenshotUrl(game) {
-  return 'https://s.wordpress.com/mshots/v1/' + encodeURIComponent(game.url) + '?w=1280';
-}
 function coverUrl(game) {
   if (game.coverImage) return game.coverImage;
-  var hasLocalCover = GAMES.some(function (g) { return g.id === game.id; });
-  if (game.custom && game.url && !hasLocalCover) return remoteScreenshotUrl(game);
   var url = 'images/' + game.id + '-cover.png';
   var version = game.coverVersion || STATIC_COVER_VERSION;
   if (version) url += '?v=' + encodeURIComponent(version);
