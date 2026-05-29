@@ -22,12 +22,12 @@ const GAMES = [
   {
     id: 'felt',
     name: 'FELT — PRIVATE POKER',
-    description: 'Host a private Texas hold\'em room and invite friends via a 4-letter code. No server, no account — pure P2P.',
+    description: 'Host a private Texas hold\'em table with blinds, antes, side pots, rebuys, blackjack mini-game, and emotes. Share a 4-letter code — no account needed.',
     url: 'https://doublea-digital.github.io/Felt/',
     creator: 'AARUSH',
     tags: ['MULTIPLAYER', 'CARD GAME', 'STRATEGY'],
     color: '#c9a84c',
-    featured: false
+    featured: true
   },
   {
     id: 'neon-drop',
