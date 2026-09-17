@@ -48,6 +48,16 @@ const GAMES = [
     tags: ['MULTIPLAYER', 'FIGHTING', 'STRATEGY'],
     color: '#a855f7',
     featured: true
+  },
+  {
+    id: 'mini-golf',
+    name: 'MINI GOLF',
+    description: 'Nine randomly generated holes, head to head. Drag to putt, dodge the sand and water, ride the boost pads. Join a friend with a 4-letter code — no server, pure P2P.',
+    url: 'https://doublea-digital.github.io/MiniGolf/',
+    creator: 'AARUSH',
+    tags: ['MULTIPLAYER', 'SPORTS', 'CASUAL'],
+    color: '#43b14b',
+    featured: false
   }
 ]
 
