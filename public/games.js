@@ -52,7 +52,7 @@ const GAMES = [
   {
     id: 'mini-golf',
     name: 'MINI GOLF',
-    description: 'Nine randomly generated holes, head to head. Drag to putt, dodge the sand and water, ride the boost pads. Join a friend with a 4-letter code — no server, pure P2P.',
+    description: 'Nine generated holes that build from easy to brutal. Drag to putt, play the bumpers and boost pads, thread the blocks. Join a friend with a 4-letter code — no server, pure P2P.',
     url: 'https://doublea-digital.github.io/MiniGolf/',
     creator: 'AARUSH',
     tags: ['MULTIPLAYER', 'SPORTS', 'CASUAL'],
