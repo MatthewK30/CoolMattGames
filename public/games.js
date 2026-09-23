@@ -52,7 +52,7 @@ const GAMES = [
   {
     id: 'mini-golf',
     name: 'MINI GOLF',
-    description: 'Host a tournament for as many friends as you want — everyone putts at once across nine holes that build from easy to brutal. Place well to earn points and unlock special balls.',
+    description: 'Host a tournament for as many friends as you want — send one link, everyone putts at once across nine holes that build from easy to brutal. Place well to earn points and unlock special balls.',
     url: 'https://doublea-digital.github.io/MiniGolf/',
     creator: 'AARUSH',
     tags: ['MULTIPLAYER', 'SPORTS', 'TOURNAMENT'],
