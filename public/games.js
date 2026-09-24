@@ -50,6 +50,16 @@ const GAMES = [
     featured: true
   },
   {
+    id: 'tour-golf',
+    name: 'TOUR GOLF',
+    description: 'Full-swing golf with a three-click swing, PGA Tour 98 style. Driver off the tee, pick your iron in, then read the putt. Wind, bunkers and the lie all bite. 1-4 players.',
+    url: 'https://doublea-digital.github.io/MiniGolf/tour.html',
+    creator: 'AARUSH',
+    tags: ['SPORTS', 'SKILL', 'LOCAL MULTIPLAYER'],
+    color: '#2f9a3a',
+    featured: false
+  },
+  {
     id: 'mini-golf',
     name: 'MINI GOLF',
     description: 'Host a tournament for as many friends as you want — send one link, everyone putts at once across nine holes that build from easy to brutal. Place well to earn points and unlock special balls.',
