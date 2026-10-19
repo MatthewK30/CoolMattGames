@@ -68,6 +68,16 @@ const GAMES = [
     tags: ['MULTIPLAYER', 'SPORTS', 'TOURNAMENT'],
     color: '#43b14b',
     featured: false
+  },
+  {
+    id: 'cool-matt-brawl',
+    name: 'COOL MATT BRAWL',
+    description: 'Platform fighting on a stage that hangs on a pivot. It tilts toward whoever weighs more, so footing keeps sliding out from under you \u2014 and pushed too far it snaps back and launches everyone on it. 2-4 players, 4 fighters with their own supers, 4 stages. CPUs if you\'re alone.',
+    url: 'https://doublea-digital.github.io/CoolMattBrawl/',
+    creator: 'AARUSH',
+    tags: ['LOCAL MULTIPLAYER', 'FIGHTING', 'ARCADE'],
+    color: '#ff2e88',
+    featured: true
   }
 ]
 
