@@ -5,55 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CoolMattGames — Play. Compete. Win.</title>
   <meta name="description" content="A hub for games built by Matthew and friends. Free to play. No ads. No pay to win.">
+  <meta name="theme-color" content="#06070b">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script>(function(){var t=localStorage.getItem('cmg-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}());</script>
+  <script>(function(){try{var t=localStorage.getItem('cmg-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}document.documentElement.classList.add('js');}());</script>
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<!-- ─────── AMBIENT LAYERS ─────── -->
+<canvas id="aurora" aria-hidden="true"></canvas>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-glow" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
 
-<header>
-  <a href="#" class="logo">
+<!-- ─────── INTRO ─────── -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-inner">
+    <div class="intro-mark">M</div>
+    <div class="intro-word"><span>COOL</span><span class="r">MATT</span><span>GAMES</span></div>
+    <div class="intro-bar"><i></i></div>
+    <div class="intro-count" id="intro-count">000</div>
+  </div>
+</div>
+
+<header id="site-header">
+  <a href="#" class="logo" aria-label="CoolMattGames home">
     <span class="logo-mark">M</span>
-    <span><span class="cool">Cool</span><span class="matt">Matt</span><span class="games">Games</span></span>
+    <span class="logo-word"><span class="cool">Cool</span><span class="matt">Matt</span><span class="games">Games</span></span>
   </a>
   <nav>
-    <a href="#games">GAMES</a>
-    <a href="#about">ABOUT</a>
-    <a href="https://github.com/MatthewK30/CoolMattGames" target="_blank" rel="noopener">SOURCE</a>
+    <a href="#games"><i>01</i>GAMES</a>
+    <a href="#about"><i>02</i>CREW</a>
+    <a href="https://github.com/MatthewK30/CoolMattGames" target="_blank" rel="noopener"><i>03</i>SOURCE</a>
   </nav>
-  <div class="online-pill">
-    <div class="online-dot"></div>
-    <span class="num" id="player-count">--</span>
-    <span class="lbl">ONLINE</span>
+  <div class="header-tools">
+    <div class="online-pill" title="Players on the site right now">
+      <div class="online-dot"></div>
+      <span class="num" id="player-count">--</span>
+      <span class="lbl">ONLINE</span>
+    </div>
+    <button class="icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+      <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    <a href="https://github.com/MatthewK30" target="_blank" rel="noopener" class="icon-btn gh-btn" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+      </svg>
+    </a>
+    <button class="icon-btn admin-portal-btn" id="admin-portal-btn" aria-label="Admin portal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 21a8 8 0 0 0-16 0"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </button>
   </div>
-  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
-    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="5"/>
-      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-    </svg>
-  </button>
-  <a href="https://github.com/MatthewK30" target="_blank" rel="noopener" class="gh-btn" aria-label="GitHub">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-    </svg>
-    GH
-  </a>
-  <button class="admin-portal-btn" id="admin-portal-btn" aria-label="Admin portal">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M20 21a8 8 0 0 0-16 0"/>
-      <circle cx="12" cy="7" r="4"/>
-    </svg>
-  </button>
 </header>
 
 <main>
@@ -62,10 +79,14 @@
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-left">
-        <h1>
-          <span class="line">Play.</span>
-          <span class="line">Compete.</span>
-          <span class="line accent">Win.</span>
+        <div class="hero-kicker">
+          <span class="kicker-dot"></span>
+          <span>INDIE ARCADE · <i class="kicker-est" style="font-style:normal">EST. 2025 · </i><b id="kicker-games">--</b> GAMES LIVE</span>
+        </div>
+        <h1 class="hero-title" aria-label="Play. Compete. Win.">
+          <span class="line" data-split>PLAY.</span>
+          <span class="line outline" data-split>COMPETE.</span>
+          <span class="line accent" data-split>WIN.</span>
         </h1>
         <p class="hero-sub">
           Games built from scratch by Matthew and friends.
@@ -73,67 +94,97 @@
           Pick one and start playing.
         </p>
         <div class="hero-actions">
-          <a href="#games" class="btn-primary">
-            BROWSE GAMES
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <a href="#games" class="btn-primary magnetic">
+            <span>BROWSE GAMES</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
               <path d="M5 12h14M13 5l7 7-7 7"/>
             </svg>
           </a>
-          <a href="#about" class="btn-ghost">ABOUT THE CREW</a>
+          <a href="#about" class="btn-ghost magnetic"><span>MEET THE CREW</span></a>
         </div>
 
         <div class="stat-strip">
-          <div>
+          <div class="stat">
             <div class="stat-num" id="stat-games">--</div>
             <div class="stat-lbl">Games Live</div>
           </div>
-          <div>
-            <div class="stat-num" id="stat-online">--</div>
+          <div class="stat">
+            <div class="stat-num live" id="stat-online">--</div>
             <div class="stat-lbl">Players Right Now</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">$0</div>
+            <div class="stat-lbl">Forever</div>
           </div>
         </div>
       </div>
 
-      <a href="#games" class="spotlight" id="spotlight" aria-label="Featured game">
+      <div class="hero-right">
+        <div class="spot-label">
+          <span>FEATURED</span>
+          <span class="spot-index" id="spot-index">01 / 04</span>
+        </div>
+        <a href="#games" class="spotlight tilt" id="spotlight" aria-label="Featured game">
+          <div class="spot-progress"><i></i></div>
+          <!-- slides injected here -->
+        </a>
         <div class="spot-dots" id="spot-dots"></div>
-        <div class="spot-progress"></div>
-        <!-- slides injected here -->
-      </a>
-    </div>
-  </section>
-
-  <!-- ─────── GAMES ─────── -->
-  <section class="section" id="games">
-    <div class="section-head">
-      <div class="section-head-left">
-        <span class="section-num">01 / LIBRARY</span>
-        <h2 class="section-title">All <span class="accent">Games</span></h2>
-        <span class="section-sub" id="games-count">— loading library</span>
       </div>
     </div>
 
-    <div class="filters" id="filters"></div>
+    <a href="#games" class="scroll-cue" aria-label="Scroll to games">
+      <span>SCROLL</span><i></i>
+    </a>
+  </section>
+
+  <!-- ─────── TICKER ─────── -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <!-- ─────── GAMES ─────── -->
+  <section class="section" id="games">
+    <div class="section-head" data-reveal>
+      <span class="section-num">01 / LIBRARY</span>
+      <h2 class="section-title">All <span class="accent">Games</span></h2>
+      <span class="section-sub" id="games-count">— loading library</span>
+    </div>
+
+    <div class="filters-wrap" data-reveal>
+      <div class="filters" id="filters"></div>
+    </div>
 
     <div class="games-grid" id="games-grid"></div>
   </section>
 
   <!-- ─────── ABOUT ─────── -->
   <section class="section" id="about">
-    <div class="section-head">
-      <div class="section-head-left">
-        <span class="section-num">02 / CREW</span>
-        <h2 class="section-title">About <span class="accent">/</span> Credits</h2>
-      </div>
+    <div class="section-head" data-reveal>
+      <span class="section-num">02 / CREW</span>
+      <h2 class="section-title">About <span class="accent">/</span> Credits</h2>
     </div>
 
+    <p class="statement" id="statement">
+      CoolMattGames is a hub for independent browser games built by Matthew Khardalian and a rotating crew of friends. Every game here was made from scratch: handwritten engines, real-time multiplayer, custom art.
+    </p>
+
     <div class="about-grid">
-      <div>
-        <p>
-          <strong>CoolMattGames</strong> is a hub for independent browser games built by Matthew Khardalian and a rotating crew of friends. Every game on this page was made from scratch — handwritten engines, real-time multiplayer, custom art.
-        </p>
-        <p>
-          Everything here is <strong>free to play</strong>. No ads. No pay-to-win. No accounts. Open a tab, hit play, see how far you get. New drops land regularly as the crew ships.
-        </p>
+      <div class="pillars" data-reveal>
+        <div class="pillar">
+          <span class="pillar-num">01</span>
+          <div class="pillar-title">Free to play</div>
+          <p>No ads. No pay-to-win. No accounts. Open a tab, hit play, see how far you get.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-num">02</span>
+          <div class="pillar-title">Built from scratch</div>
+          <p>Custom engines, netcode and art. Nothing off a template.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-num">03</span>
+          <div class="pillar-title">Always shipping</div>
+          <p>New drops land regularly as the crew ships.</p>
+        </div>
       </div>
 
       <div class="creator-cards" id="creator-cards"></div>
@@ -143,20 +194,33 @@
 </main>
 
 <footer>
-  <div class="foot-tag">
-    © 2026 <span class="accent">CoolMattGames</span> — Built by Matthew Khardalian
-  </div>
-  <div class="foot-links">
-    <a href="https://github.com/MatthewK30/CoolMattGames" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a href="#about">About</a>
-    <a href="#games">Games</a>
+  <a href="#" class="foot-mega" aria-label="Back to top">
+    <span>COOLMATTGAMES</span>
+  </a>
+  <div class="foot-row">
+    <div class="foot-tag">
+      © 2026 <span class="accent">CoolMattGames</span> — Built by Matthew Khardalian
+    </div>
+    <div class="foot-links">
+      <a href="https://github.com/MatthewK30/CoolMattGames" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="#about">About</a>
+      <a href="#games">Games</a>
+    </div>
   </div>
 </footer>
 
 <!-- ─────── GAME OVERLAY ─────── -->
 <div class="game-overlay" id="game-overlay">
-  <iframe id="game-frame" src="" allowfullscreen allow="pointer-lock"></iframe>
-  <button class="game-overlay-close" id="game-overlay-close" aria-label="Close game">&#x2715;</button>
+  <div class="game-loading" id="game-loading">
+    <div class="game-loading-name" id="game-loading-name"></div>
+    <div class="game-loading-bar"><i></i></div>
+    <div class="game-loading-lbl">LOADING</div>
+  </div>
+  <iframe id="game-frame" src="" allowfullscreen allow="pointer-lock; fullscreen; autoplay; gamepad"></iframe>
+  <button class="game-overlay-close" id="game-overlay-close" aria-label="Close game">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    <span>EXIT</span>
+  </button>
   <div class="game-overlay-watermark">coolmattgames.cool</div>
 </div>
 
@@ -233,932 +297,7 @@
 </div>
 
 <script src="games.js"></script>
-<script>
-// Session ID
-var CMG_SID = (function () {
-  var s = sessionStorage.getItem('cmg-sid');
-  if (!s) { s = Math.random().toString(36).slice(2) + Date.now().toString(36); sessionStorage.setItem('cmg-sid', s); }
-  return s;
-})();
-
-// ─────────────────────────────────────────────
-// PARTICLES — subtle red drift
-// ─────────────────────────────────────────────
-(function () {
-  const canvas = document.getElementById('particles');
-  const ctx = canvas.getContext('2d');
-  const COUNT = 50;
-  let W, H, dots;
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  function makeDot() {
-    return {
-      x: Math.random() * W, y: Math.random() * H,
-      r: Math.random() * 1.4 + 0.3,
-      vx: (Math.random() - 0.5) * 0.18,
-      vy: (Math.random() - 0.5) * 0.18,
-      alpha: Math.random() * 0.3 + 0.06
-    };
-  }
-  function init() { resize(); dots = Array.from({length: COUNT}, makeDot); }
-  function tick() {
-    ctx.clearRect(0, 0, W, H);
-    // Skip drawing in light mode — canvas is also hidden via CSS, but skip the work
-    if (document.documentElement.getAttribute('data-theme') === 'light') {
-      requestAnimationFrame(tick);
-      return;
-    }
-    for (const d of dots) {
-      d.x += d.vx; d.y += d.vy;
-      if (d.x < -4) d.x = W + 4; if (d.x > W + 4) d.x = -4;
-      if (d.y < -4) d.y = H + 4; if (d.y > H + 4) d.y = -4;
-    }
-    const LINK = 130, LINK_SQ = LINK * LINK;
-    ctx.lineWidth = 1;
-    for (let i = 0; i < dots.length; i++) {
-      for (let j = i + 1; j < dots.length; j++) {
-        const a = dots[i], b = dots[j];
-        const dx = a.x - b.x, dy = a.y - b.y;
-        const d2 = dx*dx + dy*dy;
-        if (d2 < LINK_SQ) {
-          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.13;
-          ctx.strokeStyle = `rgba(204,21,21,${alpha})`;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        }
-      }
-    }
-    for (const d of dots) {
-      ctx.beginPath();
-      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(204,21,21,${d.alpha})`;
-      ctx.fill();
-    }
-    requestAnimationFrame(tick);
-  }
-  window.addEventListener('resize', resize);
-  init(); tick();
-})();
-
-// ─────────────────────────────────────────────
-// ONLINE COUNTER
-// ─────────────────────────────────────────────
-(function () {
-  var el = document.getElementById('player-count');
-  var heroEl = document.getElementById('stat-online');
-  function ping() {
-    fetch('/api/ping', { method: 'POST', headers: { 'x-session-id': CMG_SID } })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (el) el.textContent = d.players;
-        if (heroEl) heroEl.textContent = d.players;
-      })
-      .catch(function () {});
-  }
-  ping();
-  setInterval(ping, 20000);
-})();
-
-// ─────────────────────────────────────────────
-// SPOTLIGHT ROTATOR
-// ─────────────────────────────────────────────
-var spotlightTimer = null;
-var STATIC_COVER_VERSION = '20260518-1';
-function getGameColor(game) {
-  return game.color || '#cc1515';
-}
-function coverUrl(game) {
-  if (game.coverImage) return game.coverImage;
-  var url = 'images/' + game.id + '-cover.png';
-  var version = game.coverVersion || STATIC_COVER_VERSION;
-  if (version) url += '?v=' + encodeURIComponent(version);
-  return url;
-}
-function initSpotlight(games) {
-  var spot = document.getElementById('spotlight');
-  var dotsHost = document.getElementById('spot-dots');
-  if (!spot) return;
-  if (spotlightTimer) clearInterval(spotlightTimer);
-  if (dotsHost) dotsHost.innerHTML = '';
-
-  // Show featured first, then others
-  var ordered = games.slice().sort(function (a, b) {
-    return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-  }).slice(0, 4);
-
-  // Clear (keep corners, dots host, progress)
-  var keep = ['spot-corners','spot-dots','spot-progress'];
-  Array.from(spot.children).forEach(function (c) {
-    var hasKeep = keep.some(function (k) { return c.classList && c.classList.contains(k); });
-    if (!hasKeep) c.remove();
-  });
-
-  ordered.forEach(function (game, i) {
-    var slide = document.createElement('div');
-    slide.className = 'spotlight-slide' + (i === 0 ? ' active' : '');
-    slide.dataset.idx = i;
-
-    var img = document.createElement('div');
-    img.className = 'spotlight-img';
-    img.style.backgroundImage = "url('" + coverUrl(game) + "'), linear-gradient(135deg, " + getGameColor(game) + "44, #07090d)";
-    // probe in case the image 404s — fall back to a painted canvas
-    (function (slideEl, g) {
-      var probe = new Image();
-      probe.onerror = function () {
-        var canvas = document.createElement('canvas');
-        canvas.width = 600; canvas.height = 750;
-        canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
-        drawPlaceholder(canvas, getGameColor(g), g.name);
-        slideEl.insertBefore(canvas, slideEl.firstChild);
-        slideEl.querySelector('.spotlight-img').style.display = 'none';
-      };
-      probe.src = coverUrl(g);
-    })(slide, game);
-
-    var body = document.createElement('div');
-    body.className = 'spot-body';
-
-    var tags = document.createElement('div');
-    tags.className = 'spot-tags';
-    var hot = document.createElement('span');
-    hot.className = 'spot-tag hot';
-    hot.textContent = i === 0 ? 'NOW PLAYING' : 'FEATURED';
-    tags.appendChild(hot);
-    (game.tags || []).slice(0, 2).forEach(function (t) {
-      var s = document.createElement('span');
-      s.className = 'spot-tag';
-      s.textContent = t;
-      tags.appendChild(s);
-    });
-
-    var name = document.createElement('div');
-    name.className = 'spot-name';
-    name.textContent = game.name;
-
-    var desc = document.createElement('div');
-    desc.className = 'spot-desc';
-    desc.textContent = game.description;
-
-    var meta = document.createElement('div');
-    meta.className = 'spot-meta';
-    meta.innerHTML =
-      '<span>BY ' + game.creator + '</span>' +
-      '<span>·</span>' +
-      '<span data-game-badge-spot="' + game.id + '">-- LIVE</span>' +
-      '<span class="play-cta">PLAY <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>';
-
-    body.append(tags, name, desc, meta);
-    slide.append(img, body);
-    spot.appendChild(slide);
-
-    var dot = document.createElement('div');
-    dot.className = 'spot-dot' + (i === 0 ? ' active' : '');
-    dot.dataset.idx = i;
-    dot.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      go(i);
-    });
-    if (dotsHost) dotsHost.appendChild(dot);
-  });
-
-  var current = 0;
-  var slides = spot.querySelectorAll('.spotlight-slide');
-  var dots = dotsHost ? dotsHost.querySelectorAll('.spot-dot') : [];
-  function go(i) {
-    if (!slides.length) return;
-    current = (i + slides.length) % slides.length;
-    slides.forEach(function (s, j) { s.classList.toggle('active', j === current); });
-    dots.forEach(function (d, j) { d.classList.toggle('active', j === current); });
-  }
-  if (slides.length > 1) spotlightTimer = setInterval(function () { go(current + 1); }, 7000);
-
-  spot.onclick = function (e) {
-    var idx = current;
-    var g = ordered[idx];
-    if (!g) return;
-    e.preventDefault();
-    fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': g.id } }).catch(function () {});
-    openGameOverlay(g.url);
-  };
-}
-
-// ─────────────────────────────────────────────
-// TICKER
-// ─────────────────────────────────────────────
-function initTicker(games) {
-  var track = document.getElementById('ticker-track');
-  if (!track) return;
-  var msgs = [];
-  games.forEach(function (g) {
-    msgs.push('NOW PLAYING — ' + g.name);
-  });
-  msgs.push('FREE TO PLAY');
-  msgs.push('NO ADS · NO PAY-TO-WIN · NO BS');
-  msgs.push('BUILT FROM SCRATCH');
-
-  var html = '';
-  for (var i = 0; i < 2; i++) {
-    msgs.forEach(function (m) {
-      html += '<span>' + m + '</span><span class="star">✦</span>';
-    });
-  }
-  track.innerHTML = html;
-}
-
-// ─────────────────────────────────────────────
-// CARD GENERATION
-// ─────────────────────────────────────────────
-function buildCard(game, index, totalIndex) {
-  const card = document.createElement('a');
-  card.className = 'game-card';
-  card.href = game.url;
-  card.target = '_blank';
-  card.rel = 'noopener noreferrer';
-  card.dataset.index = totalIndex;
-  card.dataset.gameId = game.id;
-  card.dataset.tags = (game.tags || []).join('|').toLowerCase();
-  if (game.custom) card.dataset.custom = 'true';
-
-  // Thumb wrapper
-  const thumbWrap = document.createElement('div');
-  thumbWrap.className = 'card-thumb-wrap';
-
-  const img = document.createElement('img');
-  img.className = 'card-thumb-img';
-  img.alt = game.name;
-  img.loading = 'lazy';
-
-  // Fallback if image missing — paint a colorful placeholder
-  img.addEventListener('error', function () {
-    var canvas = document.createElement('canvas');
-    canvas.className = 'card-thumb-img';
-    canvas.width = 480; canvas.height = 300;
-    thumbWrap.replaceChild(canvas, img);
-    drawPlaceholder(canvas, getGameColor(game), game.name);
-  });
-  img.src = coverUrl(game);
-
-  // Badges
-  const badges = document.createElement('div');
-  badges.className = 'card-badges';
-  if (game.featured) {
-    const b = document.createElement('span');
-    b.className = 'card-badge hot';
-    b.textContent = '🔥 HOT';
-    b.textContent = 'HOT';
-    badges.appendChild(b);
-  }
-  if (game.custom) {
-    const b = document.createElement('span');
-    b.className = 'card-badge new';
-    b.textContent = 'NEW';
-    badges.appendChild(b);
-  }
-
-  // Player strip
-  const playerStrip = document.createElement('span');
-  playerStrip.className = 'card-player-strip';
-  playerStrip.dataset.gameBadge = game.id;
-  playerStrip.innerHTML = '<span class="dot"></span><span>-- LIVE</span>';
-
-  // Hover overlay
-  const overlay = document.createElement('div');
-  overlay.className = 'card-thumb-overlay';
-  const playPill = document.createElement('span');
-  playPill.className = 'card-play-pill';
-  playPill.innerHTML = 'PLAY NOW <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
-  overlay.appendChild(playPill);
-
-  thumbWrap.append(img, badges, playerStrip, overlay);
-
-  // Body
-  const body = document.createElement('div');
-  body.className = 'card-body';
-  const top = document.createElement('div');
-  top.className = 'card-top';
-  const name = document.createElement('div');
-  name.className = 'card-name';
-  name.textContent = game.name;
-  const badge = document.createElement('div');
-  badge.className = 'creator-badge';
-  badge.textContent = 'BY ' + game.creator;
-  top.append(name, badge);
-
-  const desc = document.createElement('div');
-  desc.className = 'card-desc';
-  desc.textContent = game.description;
-
-  const tags = document.createElement('div');
-  tags.className = 'card-tags';
-  (game.tags || []).forEach(function (t) {
-    const span = document.createElement('span');
-    span.className = 'tag';
-    span.textContent = t;
-    tags.appendChild(span);
-  });
-
-  body.append(top, desc, tags);
-  card.append(thumbWrap, body);
-
-  card.addEventListener('click', function (e) {
-    e.preventDefault();
-    fetch('/api/play', { method: 'POST', headers: { 'x-session-id': CMG_SID, 'x-game-id': game.id } }).catch(function () {});
-    openGameOverlay(game.url);
-  });
-
-  return card;
-}
-
-function buildComingSoon(index) {
-  const card = document.createElement('div');
-  card.className = 'coming-soon-card';
-  card.dataset.index = index;
-
-  const thumb = document.createElement('div');
-  thumb.className = 'cs-thumb';
-  thumb.innerHTML = '<span class="cs-label">COMING SOON</span><small class="cs-sub">SHIPPING SOON</small>';
-
-  const body = document.createElement('div');
-  body.className = 'cs-body';
-  body.innerHTML = '<div class="cs-name">??????????</div><div class="cs-desc">Something new is brewing...</div>';
-
-  card.append(thumb, body);
-  return card;
-}
-
-function drawPlaceholder(canvas, color, name) {
-  var ctx = canvas.getContext('2d');
-  var W = canvas.width, H = canvas.height;
-  var hex = (color || '#cc1515').replace('#', '');
-  var r = parseInt(hex.slice(0,2),16)||204, g = parseInt(hex.slice(2,4),16)||21, b = parseInt(hex.slice(4,6),16)||21;
-
-  ctx.fillStyle = '#0b0e14'; ctx.fillRect(0, 0, W, H);
-  // diagonal stripes
-  ctx.strokeStyle = 'rgba('+r+','+g+','+b+',0.08)';
-  ctx.lineWidth = 1;
-  var step = Math.round(H / 8);
-  for (var xi = -H; xi < W + H; xi += step) {
-    ctx.beginPath(); ctx.moveTo(xi, 0); ctx.lineTo(xi + H, H); ctx.stroke();
-  }
-  // radial glow
-  var grd = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, H * 0.6);
-  grd.addColorStop(0, 'rgba('+r+','+g+','+b+',0.32)');
-  grd.addColorStop(1, 'transparent');
-  ctx.fillStyle = grd;
-  ctx.fillRect(0, 0, W, H);
-  // text
-  var fs = Math.max(18, Math.round(H * 0.16));
-  ctx.font = fs + 'px "Bebas Neue", sans-serif';
-  ctx.fillStyle = 'rgba('+r+','+g+','+b+',0.95)';
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.shadowColor = 'rgba('+r+','+g+','+b+',0.6)'; ctx.shadowBlur = 16;
-  var words = name.split(' ');
-  if (words.length <= 2) {
-    ctx.fillText(name, W/2, H/2);
-  } else {
-    var mid = Math.ceil(words.length / 2);
-    ctx.fillText(words.slice(0, mid).join(' '), W/2, H/2 - fs * 0.55);
-    ctx.fillText(words.slice(mid).join(' '), W/2, H/2 + fs * 0.55);
-  }
-  ctx.shadowBlur = 0;
-}
-
-// ─────────────────────────────────────────────
-// FILTER CHIPS
-// ─────────────────────────────────────────────
-var currentFilter = 'all';
-function buildFilters(games) {
-  var host = document.getElementById('filters');
-  var counts = { all: games.length };
-  games.forEach(function (g) {
-    (g.tags || []).forEach(function (t) {
-      var k = t.toLowerCase();
-      counts[k] = (counts[k] || 0) + 1;
-    });
-  });
-  var entries = Object.keys(counts).filter(function (k) { return k !== 'all'; });
-  entries.sort(function (a, b) { return counts[b] - counts[a]; });
-  var chips = [{ key: 'all', label: 'ALL' }].concat(entries.map(function (k) {
-    return { key: k, label: k.toUpperCase() };
-  }));
-
-  host.innerHTML = '';
-  chips.forEach(function (c) {
-    var btn = document.createElement('button');
-    btn.className = 'chip' + (c.key === 'all' ? ' active' : '');
-    btn.dataset.filter = c.key;
-    btn.innerHTML = c.label + '<span class="count">' + counts[c.key] + '</span>';
-    btn.addEventListener('click', function () {
-      currentFilter = c.key;
-      host.querySelectorAll('.chip').forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      applyFilter();
-    });
-    host.appendChild(btn);
-  });
-}
-
-function applyFilter() {
-  var cards = document.querySelectorAll('.game-card');
-  var visible = 0;
-  cards.forEach(function (c) {
-    var tags = (c.dataset.tags || '').split('|');
-    var show = currentFilter === 'all' || tags.indexOf(currentFilter) !== -1;
-    c.style.display = show ? '' : 'none';
-    if (show) visible++;
-  });
-  // Hide coming-soon when filtering
-  document.querySelectorAll('.coming-soon-card').forEach(function (c) {
-    c.style.display = currentFilter === 'all' ? '' : 'none';
-  });
-}
-
-// ─────────────────────────────────────────────
-// CREATOR CARDS
-// ─────────────────────────────────────────────
-function buildCreators(games) {
-  var host = document.getElementById('creator-cards');
-  if (!host) return;
-  var creators = {};
-  games.forEach(function (g) {
-    var c = g.creator || 'UNKNOWN';
-    if (!creators[c]) creators[c] = { name: c, games: [], }; 
-    creators[c].games.push(g);
-  });
-  var arr = Object.values(creators).sort(function (a, b) { return b.games.length - a.games.length; });
-  var ghMap = { 'MATTHEW': 'MatthewK30', 'AARUSH': 'doubleA-Digital' };
-  var colorMap = { 'MATTHEW': '', 'AARUSH': 'cyan' };
-  host.innerHTML = '';
-  arr.forEach(function (c) {
-    var row = document.createElement('div');
-    row.className = 'creator-row';
-    var initial = c.name.charAt(0);
-    var avatarClass = colorMap[c.name] || '';
-    var gh = ghMap[c.name];
-    row.innerHTML =
-      '<div class="creator-avatar ' + avatarClass + '">' + initial + '</div>' +
-      '<div>' +
-        '<div class="creator-name">' + c.name + '</div>' +
-        '<div class="creator-stats">' + c.games.length + ' GAME' + (c.games.length === 1 ? '' : 'S') + ' SHIPPED</div>' +
-      '</div>' +
-      (gh ? '<a href="https://github.com/' + gh + '" target="_blank" rel="noopener" class="gh-link" aria-label="GitHub of ' + c.name + '">' +
-        '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>' +
-      '</a>' : '');
-    host.appendChild(row);
-  });
-}
-
-// ─────────────────────────────────────────────
-// CUSTOM GAME STORAGE
-// ─────────────────────────────────────────────
-var ADMIN_SESSION_KEY = 'cmg-admin-session';
-var storedGames = [];
-var activeGames = [];
-function renderAdminGameList() {}
-
-async function fetchCustomGames() {
-  try {
-    var data = await (await fetch('/api/custom-games')).json();
-    return Array.isArray(data) ? data : [];
-  }
-  catch (e) { return []; }
-}
-
-function mergeLibrary(gistGames) {
-  var localIds = {};
-  var map = {};
-  var order = [];
-  GAMES.forEach(function (game) {
-    localIds[game.id] = true;
-    map[game.id] = Object.assign({}, game);
-    order.push(game.id);
-  });
-  (gistGames || []).forEach(function (game) {
-    if (!game || !game.id) return;
-    if (game.removed) {
-      delete map[game.id];
-      if (order.indexOf(game.id) === -1) order.push(game.id);
-      return;
-    }
-    var merged = Object.assign({}, map[game.id] || {}, game);
-    merged.custom = !localIds[game.id] || !!game.custom;
-    if (order.indexOf(game.id) === -1) order.push(game.id);
-    map[game.id] = merged;
-  });
-  return order.filter(function (id) { return !!map[id]; }).map(function (id) { return map[id]; });
-}
-
-function updateLibraryCount(total) {
-  var countEl = document.getElementById('games-count');
-  if (countEl) countEl.textContent = '— ' + total + ' game' + (total === 1 ? '' : 's') + ' in the library';
-  var statGames = document.getElementById('stat-games');
-  if (statGames) statGames.textContent = total;
-}
-
-function animateCards() {
-  var cards = document.querySelectorAll('.game-card, .coming-soon-card');
-  cards.forEach(function (card) {
-    var delay = parseInt(card.dataset.index || 0) * 70;
-    setTimeout(function () { card.classList.add('animate-in'); }, delay);
-  });
-}
-
-function renderGrid(games) {
-  var grid = document.getElementById('games-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  games.forEach(function (game, i) {
-    grid.appendChild(buildCard(game, i, i));
-  });
-  grid.appendChild(buildComingSoon(games.length));
-  grid.appendChild(buildComingSoon(games.length + 1));
-  animateCards();
-}
-
-async function refreshLibrary() {
-  storedGames = await fetchCustomGames();
-  activeGames = mergeLibrary(storedGames);
-  currentFilter = 'all';
-  renderGrid(activeGames);
-  initSpotlight(activeGames);
-  buildFilters(activeGames);
-  buildCreators(activeGames);
-  updateLibraryCount(activeGames.length);
-  renderAdminGameList();
-}
-
-// ─────────────────────────────────────────────
-// BUILD GRID
-// ─────────────────────────────────────────────
-(async function () {
-  await refreshLibrary();
-})();
-
-// ─────────────────────────────────────────────
-// PER-GAME PLAYER COUNTS
-// ─────────────────────────────────────────────
-(function () {
-  function fetchStats() {
-    fetch('/api/stats')
-      .then(function (r) { return r.json(); })
-      .then(function (stats) {
-        for (var id in stats) {
-          var span = document.querySelector('[data-game-badge="' + id + '"] span:last-child');
-          if (span) span.textContent = stats[id] + ' LIVE';
-          var spot = document.querySelector('[data-game-badge-spot="' + id + '"]');
-          if (spot) spot.textContent = stats[id] + ' LIVE';
-        }
-      })
-      .catch(function () {});
-  }
-  fetchStats();
-  setInterval(fetchStats, 30000);
-})();
-
-// ─────────────────────────────────────────────
-// ADMIN PORTAL
-// ─────────────────────────────────────────────
-(function () {
-  var portalBtn = document.getElementById('admin-portal-btn');
-  var loginOverlay = document.getElementById('admin-login-overlay');
-  var dashboardOverlay = document.getElementById('admin-dashboard-overlay');
-  var loginForm = document.getElementById('admin-login-form');
-  var passwordInput = document.getElementById('admin-password');
-  var loginError = document.getElementById('admin-login-error');
-  var gameForm = document.getElementById('admin-game-form');
-  var gameIdInput = document.getElementById('admin-game-id');
-  var nameInput = document.getElementById('admin-name');
-  var descInput = document.getElementById('admin-desc');
-  var urlInput = document.getElementById('admin-url');
-  var creatorInput = document.getElementById('admin-creator');
-  var tagsInput = document.getElementById('admin-tags');
-  var formState = document.getElementById('admin-form-state');
-  var submitBtn = document.getElementById('admin-submit');
-  var precomputeBtn = document.getElementById('admin-precompute-covers');
-  var saveError = document.getElementById('admin-save-error');
-
-  function getAdminToken() { return localStorage.getItem(ADMIN_SESSION_KEY); }
-  function setAdminToken(token) { localStorage.setItem(ADMIN_SESSION_KEY, token); }
-  function clearAdminToken() { localStorage.removeItem(ADMIN_SESSION_KEY); }
-
-  function openModal(overlay) {
-    overlay.hidden = false;
-    requestAnimationFrame(function () { overlay.classList.add('open'); });
-  }
-
-  function closeModal(overlay) {
-    overlay.classList.remove('open');
-    setTimeout(function () { if (!overlay.classList.contains('open')) overlay.hidden = true; }, 220);
-  }
-
-  function openLogin() {
-    loginError.hidden = true;
-    passwordInput.value = '';
-    openModal(loginOverlay);
-    setTimeout(function () { passwordInput.focus(); }, 100);
-  }
-
-  function closeLogin() { closeModal(loginOverlay); }
-
-  async function hasValidAdminSession() {
-    if (!getAdminToken()) return false;
-    try {
-      var r = await fetch('/api/admin/session', { headers: { 'x-admin-session': getAdminToken() } });
-      if (r.ok) return true;
-    } catch (e) {}
-    clearAdminToken();
-    return false;
-  }
-
-  async function openDashboard() {
-    if (!(await hasValidAdminSession())) return openLogin();
-    renderAdminGameList();
-    openModal(dashboardOverlay);
-  }
-
-  function closeDashboard() { closeModal(dashboardOverlay); }
-
-  async function adminRequest(url, options) {
-    options = options || {};
-    options.headers = Object.assign({}, options.headers || {}, { 'x-admin-session': getAdminToken() || '' });
-    var r = await fetch(url, options);
-    if (r.status === 401) {
-      clearAdminToken();
-      closeDashboard();
-      openLogin();
-      throw new Error('Unauthorized');
-    }
-    if (!r.ok) throw new Error('Request failed');
-    return r.json();
-  }
-
-  function findGame(id) {
-    return activeGames.find(function (game) { return game.id === id; });
-  }
-
-  function slugify(name) {
-    return (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'custom-game';
-  }
-
-  function newGameId(name) {
-    var base = slugify(name);
-    var ids = {};
-    activeGames.concat(storedGames).forEach(function (game) { if (game && game.id) ids[game.id] = true; });
-    return ids[base] ? base + '-' + Date.now() : base;
-  }
-
-  function parseTags(value) {
-    return (value || '').split(',').map(function (tag) {
-      return tag.trim().toUpperCase();
-    }).filter(Boolean);
-  }
-
-  function resetGameForm() {
-    gameForm.reset();
-    gameIdInput.value = '';
-    formState.textContent = 'ADDING NEW GAME';
-    submitBtn.textContent = 'ADD GAME';
-    saveError.hidden = true;
-  }
-
-  function editGame(game) {
-    gameIdInput.value = game.id;
-    nameInput.value = game.name || '';
-    descInput.value = game.description || '';
-    urlInput.value = game.url || '';
-    creatorInput.value = game.creator || '';
-    tagsInput.value = (game.tags || []).join(', ');
-    formState.textContent = 'EDITING ' + (game.name || game.id);
-    submitBtn.textContent = 'SAVE GAME';
-    saveError.hidden = true;
-    nameInput.focus();
-  }
-
-  function buildGameFromForm(existing) {
-    var url = urlInput.value.trim();
-    if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
-    return {
-      id: existing ? existing.id : newGameId(nameInput.value),
-      name: nameInput.value.trim().toUpperCase(),
-      description: descInput.value.trim(),
-      url: url,
-      creator: creatorInput.value.trim().toUpperCase(),
-      tags: parseTags(tagsInput.value),
-      featured: existing ? !!existing.featured : false,
-      custom: existing ? !!existing.custom : true
-    };
-  }
-
-  loginForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    loginError.hidden = true;
-    var r = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: passwordInput.value })
-    });
-    if (!r.ok) {
-      loginError.hidden = false;
-      return;
-    }
-    var data = await r.json();
-    setAdminToken(data.token);
-    closeLogin();
-    await openDashboard();
-  });
-
-  gameForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    saveError.hidden = true;
-    var existing = gameIdInput.value ? findGame(gameIdInput.value) : null;
-    var game = buildGameFromForm(existing);
-    try {
-      if (existing) {
-        await adminRequest('/api/custom-games/' + encodeURIComponent(existing.id), {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(game)
-        });
-      } else {
-        await adminRequest('/api/custom-games', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(game)
-        });
-      }
-      resetGameForm();
-      await refreshLibrary();
-    } catch (err) {
-      saveError.hidden = false;
-    }
-  });
-
-  document.getElementById('admin-reset-form').addEventListener('click', resetGameForm);
-  precomputeBtn.addEventListener('click', async function () {
-    saveError.hidden = true;
-    precomputeBtn.disabled = true;
-    precomputeBtn.textContent = 'PRECOMPUTING...';
-    try {
-      var seen = {};
-      var ids = [];
-      storedGames.forEach(function (game) {
-        if (!game || game.removed || !game.id || !game.url || game.coverImage || seen[game.id]) return;
-        seen[game.id] = true;
-        ids.push(game.id);
-      });
-      var updated = 0;
-      var failed = 0;
-      for (var i = 0; i < ids.length; i++) {
-        precomputeBtn.textContent = 'PRECOMPUTING ' + (i + 1) + '/' + ids.length;
-        var result = await adminRequest('/api/custom-games/precompute-covers', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: ids[i] })
-        });
-        updated += result.updated || 0;
-        failed += result.failed || 0;
-      }
-      precomputeBtn.textContent = failed ? 'UPDATED ' + updated + ' / FAILED ' + failed : 'UPDATED ' + updated;
-      await refreshLibrary();
-      setTimeout(function () { precomputeBtn.textContent = 'PRECOMPUTE COVERS'; }, 1600);
-    } catch (err) {
-      saveError.hidden = false;
-      precomputeBtn.textContent = 'PRECOMPUTE COVERS';
-    } finally {
-      precomputeBtn.disabled = false;
-    }
-  });
-  document.getElementById('admin-login-cancel').addEventListener('click', closeLogin);
-  document.getElementById('admin-logout').addEventListener('click', function () {
-    clearAdminToken();
-    resetGameForm();
-    closeDashboard();
-  });
-  portalBtn.addEventListener('click', async function () { getAdminToken() ? await openDashboard() : openLogin(); });
-  loginOverlay.addEventListener('click', function (e) { if (e.target === loginOverlay) closeLogin(); });
-  dashboardOverlay.addEventListener('click', function (e) { if (e.target === dashboardOverlay) closeDashboard(); });
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    if (loginOverlay.classList.contains('open')) closeLogin();
-    if (dashboardOverlay.classList.contains('open')) closeDashboard();
-  });
-
-  renderAdminGameList = function () {
-    var list = document.getElementById('admin-game-list');
-    if (!list || !getAdminToken()) return;
-    list.innerHTML = '';
-    activeGames.forEach(function (game) {
-      var row = document.createElement('div');
-      row.className = 'admin-game-row';
-      var info = document.createElement('div');
-      info.className = 'admin-game-info';
-      var name = document.createElement('div');
-      name.className = 'admin-game-name';
-      name.textContent = game.name;
-      var meta = document.createElement('div');
-      meta.className = 'admin-game-meta';
-      meta.textContent = 'BY ' + game.creator + ' · ' + (game.tags || []).join(', ');
-      info.append(name, meta);
-      var actions = document.createElement('div');
-      actions.className = 'admin-game-actions';
-      var edit = document.createElement('button');
-      edit.type = 'button';
-      edit.className = 'admin-row-btn';
-      edit.textContent = 'EDIT';
-      edit.addEventListener('click', function () { editGame(game); });
-      var remove = document.createElement('button');
-      remove.type = 'button';
-      remove.className = 'admin-row-btn danger';
-      remove.textContent = 'REMOVE';
-      remove.addEventListener('click', async function () {
-        if (!confirm('Remove ' + game.name + '?')) return;
-        try {
-          await adminRequest('/api/custom-games/' + encodeURIComponent(game.id), { method: 'DELETE' });
-          resetGameForm();
-          await refreshLibrary();
-        } catch (err) {
-          saveError.hidden = false;
-        }
-      });
-      actions.append(edit, remove);
-      row.append(info, actions);
-      list.appendChild(row);
-    });
-  };
-})();
-
-// ─────────────────────────────────────────────
-// STAGGERED CARD ANIMATIONS
-// ─────────────────────────────────────────────
-(function () {
-  const observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        const delay = parseInt(entry.target.dataset.index || 0) * 90;
-        setTimeout(function () {
-          entry.target.classList.add('animate-in');
-        }, delay);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.06 });
-  // Defer to next tick so dynamic cards register
-  setTimeout(function () {
-    const cards = document.querySelectorAll('.game-card, .coming-soon-card');
-    cards.forEach(function (c) { observer.observe(c); });
-  }, 50);
-})();
-
-// ─────────────────────────────────────────────
-// THEME TOGGLE
-// ─────────────────────────────────────────────
-(function () {
-  var btn = document.getElementById('theme-toggle');
-  if (!btn) return;
-  var html = document.documentElement;
-  var transitionTimer;
-  btn.addEventListener('click', function () {
-    // Trigger smooth crossfade for ~450ms
-    html.classList.add('theme-transitioning');
-    clearTimeout(transitionTimer);
-    transitionTimer = setTimeout(function () {
-      html.classList.remove('theme-transitioning');
-    }, 480);
-
-    var isLight = html.getAttribute('data-theme') === 'light';
-    if (isLight) {
-      html.removeAttribute('data-theme');
-      localStorage.setItem('cmg-theme', 'dark');
-    } else {
-      html.setAttribute('data-theme', 'light');
-      localStorage.setItem('cmg-theme', 'light');
-    }
-  });
-})();
-
-// ─────────────────────────────────────────────
-// GAME OVERLAY
-// ─────────────────────────────────────────────
-(function () {
-  var overlay = document.getElementById('game-overlay');
-  var frame   = document.getElementById('game-frame');
-  var closeBtn = document.getElementById('game-overlay-close');
-
-  function openGameOverlay(url) {
-    frame.src = url;
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeGameOverlay() {
-    overlay.classList.remove('open');
-    frame.src = '';
-    document.body.style.overflow = '';
-  }
-  window.openGameOverlay = openGameOverlay;
-  closeBtn.addEventListener('click', closeGameOverlay);
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && overlay.classList.contains('open')) closeGameOverlay();
-  });
-})();
-</script>
+<script src="fx.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
