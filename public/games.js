@@ -88,6 +88,16 @@ const GAMES = [
     tags: ['MULTIPLAYER', 'BATTLE ROYALE', 'SHOOTER'],
     color: '#00f0ff',
     featured: true
+  },
+  {
+    id: 'live-interrogation',
+    name: 'LIVE INTERROGATION',
+    description: 'Real-time text-only noir deduction for 3-8 friends. Interrogate the suspect, pin evidence, and vote in secret. No voice chat, all nerve.',
+    url: 'https://live-interrogation.onrender.com',
+    creator: 'MATTEEN',
+    tags: ['MULTIPLAYER', 'DEDUCTION', 'TEXT'],
+    color: '#f2a93b',
+    featured: false
   }
 ]
 
