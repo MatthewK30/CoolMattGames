@@ -83,7 +83,7 @@ const GAMES = [
     id: 'prism-clash',
     name: 'PRISM CLASH',
     description: 'Neon battle royale for up to 10 players. Drop in as a chibi hero, loot guns from gray to legendary, break crates, hide in bushes, and draft wild powers and ultimates as the zone closes. Fast 2-4 minute matches across a neon city and crystal wilds. Share a room code, or practice against bots instantly.',
-    url: 'https://prism-clash.vercel.app',
+    url: 'https://doublea-digital.github.io/prism-clash/',
     creator: 'AARUSH',
     tags: ['MULTIPLAYER', 'BATTLE ROYALE', 'SHOOTER'],
     color: '#00f0ff',
