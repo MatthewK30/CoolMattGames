@@ -31,6 +31,34 @@ function trackPlay(game) {
 })();
 
 // ─────────────────────────────────────────────
+// LIFETIME VISITS — stored in Supabase, so it survives redeploys and cold
+// starts. A visit is a browser session; the same browser counts again after
+// 30 minutes away.
+// ─────────────────────────────────────────────
+(function () {
+  var URL = 'https://esogrnjilzxcmvgpieib.supabase.co/rest/v1/rpc/cmg_record_visit';
+  var KEY = 'sb_publishable__QUefxDt7tRi9Y943QK7yw_ivbRt71u';
+  var el = document.getElementById('stat-visits');
+  var vid;
+  try {
+    vid = localStorage.getItem('cmg-vid');
+    if (!vid) { vid = 'v' + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('cmg-vid', vid); }
+  } catch (e) { vid = 'v' + CMG_SID; }
+  fetch(URL, {
+    method: 'POST',
+    headers: { apikey: KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_visitor: vid })
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!el || !d || typeof d.visits !== 'number') return;
+      FX.countTo(el, d.visits);
+      el.title = d.pageviews + ' page views from ' + d.visitors + ' visitors since ' + new Date(d.since).toLocaleDateString();
+    })
+    .catch(function () {});
+})();
+
+// ─────────────────────────────────────────────
 // SPOTLIGHT DECK
 // ─────────────────────────────────────────────
 var spotlightTimer = null;
