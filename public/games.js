@@ -62,7 +62,7 @@ const GAMES = [
   {
     id: 'block-blast',
     name: 'BLOCK BLAST',
-    description: 'Drag blocks onto the 8×8 board and fill rows and columns to blast them away. Clear back to back for combo multipliers, wipe the whole board for an All Clear bonus, and chase your best score. Smooth, satisfying and quick to pick up — plays great on phone or desktop.',
+    description: 'Drag blocks onto the 8×8 board and fill rows and columns to blast them away. Clear again within 3 moves to grow a combo multiplier — hit ×3 and the streak heart lights up and keeps burning as long as you keep clearing. Fair hands every time, harder pieces as your score climbs, All Clear bonuses, and your best score saved. Plays great on phone or desktop.',
     url: 'https://doublea-digital.github.io/BlockBlast/',
     creator: 'AARUSH',
     tags: ['PUZZLE', 'ARCADE', 'SOLO'],
