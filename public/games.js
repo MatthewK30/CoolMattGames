@@ -60,6 +60,16 @@ const GAMES = [
     featured: false
   },
   {
+    id: 'block-blast',
+    name: 'BLOCK BLAST',
+    description: 'Drag blocks onto the 8×8 board and fill rows and columns to blast them away. Clear back to back for combo multipliers, wipe the whole board for an All Clear bonus, and chase your best score. Smooth, satisfying and quick to pick up — plays great on phone or desktop.',
+    url: 'https://doublea-digital.github.io/BlockBlast/',
+    creator: 'AARUSH',
+    tags: ['PUZZLE', 'ARCADE', 'SOLO'],
+    color: '#ff5a7a',
+    featured: false
+  },
+  {
     id: 'mini-golf',
     name: 'MINI GOLF',
     description: 'Host a tournament for as many friends as you want — send one link, everyone putts at once across nine holes that build from easy to brutal. Place well to earn points and unlock special balls.',
