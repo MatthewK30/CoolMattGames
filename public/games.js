@@ -52,7 +52,7 @@ const GAMES = [
   {
     id: 'tour-golf',
     name: 'TOUR GOLF',
-    description: 'Full-swing golf with a three-click swing, PGA Tour 98 style. Driver off the tee, pick your iron in, then read the putt. Wind, bunkers and the lie all bite. 1-4 players.',
+    description: 'Championship golf in full 3D. Three courses — tree-lined Whispering Pines, windswept Saltmarsh Links and the Red Mesa desert — over 9 or 18 holes. Swing with a PGA Tour 98-style three-click meter while your golfer swings with you, shape draws and fades, then switch to a hold-and-release short game (bump, pitch, flop, splash) and read real breaking greens. Real ball physics with wind, spin and bounce, broadcast-style camera cuts and shot tracers, Amateur/Pro/Tour difficulty, stats and personal bests. 1-4 players pass and play.',
     url: 'https://doublea-digital.github.io/MiniGolf/tour.html',
     creator: 'AARUSH',
     tags: ['SPORTS', 'SKILL', 'LOCAL MULTIPLAYER'],
