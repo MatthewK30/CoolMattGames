@@ -53,7 +53,10 @@ function trackPlay(game) {
     .then(function (d) {
       if (!el || !d || typeof d.visits !== 'number') return;
       FX.countTo(el, d.visits);
-      el.title = d.pageviews + ' page views from ' + d.visitors + ' visitors since ' + new Date(d.since).toLocaleDateString();
+      var since = new Date(d.since).toLocaleDateString();
+      el.title = d.estimated
+        ? d.counted + ' visits counted since ' + since + ', plus about ' + d.estimated + ' estimated from before counting began'
+        : d.pageviews + ' page views from ' + d.visitors + ' visitors since ' + since;
     })
     .catch(function () {});
 })();
