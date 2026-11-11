@@ -108,6 +108,16 @@ const GAMES = [
     tags: ['MULTIPLAYER', 'DEDUCTION', 'TEXT'],
     color: '#f2a93b',
     featured: false
+  },
+  {
+    id: 'nitrokick',
+    name: 'NITROKICK',
+    description: 'Rocket-powered car soccer in full 3D. Boost, flip, air roll and fly aerials against Easy, Medium or Hard bots in 1v1 to 3v3, practise in Free Play, customise your car in the Garage, and relive every goal in slow-motion replays.',
+    url: 'https://nitrokick.vercel.app',
+    creator: 'MATTEEN',
+    tags: ['SOLO', 'SPORTS', '3D'],
+    color: '#ffb627',
+    featured: false
   }
 ]
 
