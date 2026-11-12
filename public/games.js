@@ -52,7 +52,7 @@ const GAMES = [
   {
     id: 'tour-golf',
     name: 'TOUR GOLF',
-    description: 'Championship golf in full 3D. Six courses — tree-lined Whispering Pines, windswept Saltmarsh Links beside the sea, the Red Mesa canyon desert, autumn Maple Hollow with creeks across the fairways, the Coral Cay island course with palms and ocean views, and snowbound Glacier Peaks in the high mountains — over 9 or 18 holes, with lifelike trees, reflective water, real-time shadows and grass that sways in the wind. Swing with a PGA Tour 98-style three-click meter while a fully animated golfer swings with you — knee flex, hip turn, weight shift and a real follow-through — shape draws and fades, then switch to a hold-and-release short game (bump, pitch, flop, splash) and read real breaking greens. Real ball physics with wind, spin and bounce, broadcast-style camera cuts and shot tracers, Amateur/Pro/Tour difficulty, stats and personal bests. Play online in a party of 2-4 with a room code — everyone plays each hole at the same time and watches friends’ shots fly with a live leaderboard — or 1-4 players pass and play.',
+    description: 'Championship golf in full 3D. Six courses — tree-lined Whispering Pines, windswept Saltmarsh Links beside the sea, the Red Mesa canyon desert, autumn Maple Hollow with creeks across the fairways, the Coral Cay island course with palms and ocean views, and snowbound Glacier Peaks in the high mountains — over 9 or 18 holes, with lifelike trees, reflective water, real-time shadows and grass that sways in the wind. Swing with a PGA Tour 98-style three-click meter while a fully animated golfer swings with you — knee flex, hip turn, weight shift and a real follow-through — shape draws and fades, then switch to a hold-and-release short game (bump, pitch, flop, splash) and read real breaking greens. Real ball physics with wind, spin and bounce, broadcast-style camera cuts and shot tracers, Amateur/Pro/Tour difficulty, stats and personal bests. Play online in a party of 2-4 with a room code (it connects even on school and office Wi-Fi that blocks most online games) — everyone plays each hole at the same time and watches friends’ shots fly with a live leaderboard — or 1-4 players pass and play.',
     url: 'https://doublea-digital.github.io/MiniGolf/tour.html',
     creator: 'AARUSH',
     tags: ['MULTIPLAYER', 'SPORTS', 'LOCAL MULTIPLAYER'],
@@ -72,7 +72,7 @@ const GAMES = [
   {
     id: 'mini-golf',
     name: 'MINI GOLF',
-    description: 'Host a tournament for as many friends as you want — send one link, everyone putts at once across nine holes that build from easy to brutal. Place well to earn points and unlock special balls.',
+    description: 'Host a tournament for as many friends as you want — send one link (it connects even on school Wi-Fi), everyone putts at once across nine holes that build from easy to brutal. Place well to earn points and unlock special balls.',
     url: 'https://doublea-digital.github.io/MiniGolf/',
     creator: 'AARUSH',
     tags: ['MULTIPLAYER', 'SPORTS', 'TOURNAMENT'],
