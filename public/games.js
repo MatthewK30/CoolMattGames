@@ -100,6 +100,16 @@ const GAMES = [
     featured: true
   },
   {
+    id: 'courtside',
+    name: 'COURTSIDE',
+    description: 'A 3D basketball sim for Windows. Run full-court 5v5 in a packed arena or 3v3 Blacktop street ball. Time your release on a 2K-style shot meter, break defenders down with crossovers, spins and step-backs, and play against AI at five difficulty levels. Free download; plays on a home PC.',
+    url: 'https://doublea-digital.github.io/Courtside-Download/',
+    creator: 'AARUSH',
+    tags: ['SPORTS', 'DOWNLOAD', '3D'],
+    color: '#f5b720',
+    featured: true
+  },
+  {
     id: 'live-interrogation',
     name: 'LIVE INTERROGATION',
     description: 'Real-time text-only noir deduction for 3-8 friends. Interrogate the suspect, pin evidence, and vote in secret. No voice chat, all nerve.',
