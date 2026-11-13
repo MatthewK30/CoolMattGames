@@ -1,25 +1,5 @@
 const GAMES = [
   {
-    id: 'paintball',
-    name: '2 STEPS AHEAD PAINTBALL',
-    description: 'Competitive first person paintball with custom maps, multiplayer, and friend skins.',
-    url: 'https://2steps-ahead-paintball.vercel.app',
-    creator: 'MATTHEW',
-    tags: ['MULTIPLAYER', 'FPS', 'COMPETITIVE'],
-    color: '#cc1515',
-    featured: true
-  },
-  {
-    id: 'zombie',
-    name: 'ZOMBIE SURVIVAL',
-    description: 'Multiplayer zombie survival — fight waves and outlast your friends.',
-    url: 'https://zombie-liart.vercel.app/?server=wss://zombie-multiplayer-server-gtbt.onrender.com',
-    creator: 'MATTHEW',
-    tags: ['MULTIPLAYER', 'SURVIVAL', 'HORROR'],
-    color: '#22cc22',
-    featured: true
-  },
-  {
     id: 'felt',
     name: 'FELT — PRIVATE POKER',
     description: 'Host a private Texas hold\'em table with blinds, antes, side pots, rebuys, blackjack mini-game, and emotes. Share a 4-letter code — no account needed.',
