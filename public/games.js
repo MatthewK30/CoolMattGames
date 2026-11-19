@@ -82,8 +82,8 @@ const GAMES = [
   {
     id: 'courtside',
     name: 'COURTSIDE',
-    description: 'A 3D basketball sim built in Unreal Engine 5 with lifelike MetaHuman players. Run full-court 5v5 in a packed arena or 3v3 Blacktop street ball from a 2K-style camera. Time your release on the shot meter, break defenders down with crossovers, spins and step-backs, and play against AI at five difficulty levels. Free Windows download.',
-    url: 'https://doublea-digital.github.io/Courtside-Download/',
+    description: '3D basketball right in your browser. Pick from 20 all-time legends and run 1v1 to 5v5. Hit green on the shot meter, break ankles with crossovers, spins and step-backs, and lock up on defense with real blocks and contests. Play the CPU at five difficulty levels, or challenge a friend online with a room code. No download.',
+    url: 'https://doublea-digital.github.io/Courtside-Download/play/',
     creator: 'AARUSH',
     tags: ['SPORTS', 'DOWNLOAD', '3D'],
     color: '#f5b720',
